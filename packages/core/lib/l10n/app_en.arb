@@ -1,0 +1,72 @@
+{
+    "finishedProjects" : "Finished Projects",
+    "productiveDay" : "Productive Days",
+    "finishedTasks" : "Finished Tasks",
+    "recentProjects" : "Recent Projects",
+    "seeAll" : "See All",
+    "nextTask" : "Next Task",
+
+    "task" : "Task",
+    "log" : "Log",
+    "info" : "Info",
+
+    "createProjectTitle": "Create New Project",
+    "createProjectHeadline": "Start Something Great",
+    "addCoverImage": "Add Cover Image",
+    "failedToPickImage": "Failed to pick image: {error}",
+    "@failedToPickImage": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "projectNameLabel": "Project Name*",
+    "projectNameHint": "Example: Teak Bookshelf",
+    "projectNameValidationError": "Project name cannot be empty",
+    "projectDescriptionLabel": "Description (Optional)",
+    "projectDescriptionHint": "Briefly describe your project...",
+    "projectStatusLabel": "Project Status",
+    "completionDateLabel": "Completion Date (Optional)",
+    "completionDateHint": "Choose Date",
+    "saveProjectButton": "Save Project",
+    "projectSavedSuccess": "Project saved successfully!",
+
+    "allProject" : "All Project",
+    "deleteProject" : "Delete Project",
+    "projectDeleteConfirmation" : "Are you sure want to delete this project?",
+    "projectDeletedSuccess": "Project deleted successfully!",
+    "dataDeletedSuccess": "Projects deleted successfully!",
+    "dataUpdatedSuccess": "Data updated successfully!",
+    "search": "Search",
+
+    "projectNotFound" : "Project Not Found!",
+    "projectDescription" : "Project Description",
+    "createdDate" : "Created Date",
+
+    "editProject" : "Edit Project",
+
+    "taskTitleLabel" : "Title",
+    "addTask" : "Add Task",
+    "taskAddedSuccess" : "Task added successfully!",
+    "emptyTask" : "There is no task for this project",
+
+    "choosePicture" : "Choose Picture",
+    "changePicture" : "Change Picture",
+    "logNoteLabel" : "Note (Optional)",
+
+    "addLog" : "Add Log",
+    "emptyLog" : "There is no log for this project",
+    "logAddedSuccess" : "Log added successfully!",
+
+    "tryAgain": "Try Again",
+    "somethingWentWrong" : "Something Went Wrong!",
+    "save" : "Save",
+    "edit" : "Edit",
+    "cancel" : "Cancel",
+    "delete" : "Delete",
+
+    "confirmDelete" : "Confirmation Delete",
+    "confirmationDelete" : "Are you sure want to delete this?",
+    "changeStatus" : "Change Status"
+}

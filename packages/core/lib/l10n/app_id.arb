@@ -1,0 +1,72 @@
+{
+    "finishedProjects" : "Proyek Selesai",
+    "productiveDay" : "Hari Produktif",
+    "finishedTasks" : "Tugas Selesai",
+    "recentProjects" : "Proyek Terakhir",
+    "seeAll" : "Lihat Semua",
+    "nextTask" : "Tugas Berikutnya",
+
+    "task" : "Tugas",
+    "log" : "Log",
+    "info" : "Info",
+
+    "createProjectTitle": "Buat Proyek Baru",
+    "createProjectHeadline": "Mulai Sesuatu yang Hebat",
+    "addCoverImage": "Tambah Gambar Sampul",
+    "failedToPickImage": "Gagal memilih gambar: {error}",
+    "@failedToPickImage": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "projectNameLabel": "Nama Proyek*",
+    "projectNameHint": "Contoh: Rak Buku Jati Belanda",
+    "projectNameValidationError": "Nama proyek tidak boleh kosong",
+    "projectDescriptionLabel": "Deskripsi (Opsional)",
+    "projectDescriptionHint": "Jelaskan sedikit tentang proyek Anda...",
+    "projectStatusLabel": "Status Proyek",
+    "completionDateLabel": "Tanggal Selesai (Opsional)",
+    "completionDateHint": "Pilih Tanggal",
+    "saveProjectButton": "Simpan Proyek",
+    "projectSavedSuccess": "Proyek berhasil disimpan!",
+
+    "allProject" : "Semua Proyek",
+    "deleteProject" : "Hapus Proyek",
+    "projectDeleteConfirmation" : "Apakah anda yakin ingin menghapus proyek ini?",
+    "projectDeletedSuccess": "Proyek berhasil dihapus!",
+    "dataDeletedSuccess": "Data berhasil dihapus!",
+    "dataUpdatedSuccess": "Data berhasil diubah!",
+    "search": "Cari",
+
+    "projectNotFound" : "Proyek tidak ditemukan!",
+    "projectDescription" : "Deskripsi Proyek",
+    "createdDate" : "Tanggal Dibuat",
+
+    "editProject" : "Edit Proyek",
+
+    "taskTitleLabel" : "Judul Tugas",
+    "addTask" : "Tambah Tugas",
+    "taskAddedSuccess" : "Tugas berhasil ditambahkan!",
+    "emptyTask" : "Belum ada tugas untuk proyek ini",
+
+    "choosePicture" : "Pilih Gambar",
+    "changePicture" : "Ganti Gambar",
+    "logNoteLabel" : "Catatan (Opsional)",
+
+    "addLog" : "Tambah Log",
+    "logAddedSuccess" : "Log berhasil ditambahkan!",
+    "emptyLog" : "Belum ada log untuk proyek ini",
+
+    "tryAgain": "Coba Lagi",
+    "somethingWentWrong" : "Ada Sesuatu Yang Salah!",
+    "save" : "Simpan",
+    "edit" : "Ubah",
+    "cancel" : "Batal",
+    "delete" : "Delete",
+
+    "confirmDelete" : "Konfirmasi Hapus",
+    "confirmationDelete" : "Apakah anda yakin ingin menghapus ini?",
+    "changeStatus" : "Ubah Status"
+}

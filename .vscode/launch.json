@@ -1,0 +1,105 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "project_box",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "project_box (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "project_box (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "core",
+            "cwd": "packages\\core",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "core (profile mode)",
+            "cwd": "packages\\core",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "core (release mode)",
+            "cwd": "packages\\core",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "progress_log",
+            "cwd": "packages\\progress_log",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "progress_log (profile mode)",
+            "cwd": "packages\\progress_log",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "progress_log (release mode)",
+            "cwd": "packages\\progress_log",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "project",
+            "cwd": "packages\\project",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "project (profile mode)",
+            "cwd": "packages\\project",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "project (release mode)",
+            "cwd": "packages\\project",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "task",
+            "cwd": "packages\\task",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "task (profile mode)",
+            "cwd": "packages\\task",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "task (release mode)",
+            "cwd": "packages\\task",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
