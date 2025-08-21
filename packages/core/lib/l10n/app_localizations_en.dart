@@ -27,6 +27,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nextTask => 'Next Task';
 
   @override
+  String get ad => 'Ad';
+
+  @override
+  String get goodMorning => 'Good Morning,';
+
+  @override
+  String get goodAfternoon => 'Good Afternoon,';
+
+  @override
+  String get goodEvening => 'Good Evening,';
+
+  @override
+  String get goodNight => 'Good Night,';
+
+  @override
+  String get homeTagline => 'Let\'s Create!';
+
+  @override
+  String failedToLoadProjects(String error) {
+    return 'Failed to load projects: $error';
+  }
+
+  @override
+  String fromProject(String projectName) {
+    return 'from: $projectName';
+  }
+
+  @override
   String get task => 'Task';
 
   @override

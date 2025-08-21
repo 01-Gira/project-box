@@ -27,6 +27,34 @@ class AppLocalizationsId extends AppLocalizations {
   String get nextTask => 'Tugas Berikutnya';
 
   @override
+  String get ad => 'Iklan';
+
+  @override
+  String get goodMorning => 'Selamat Pagi,';
+
+  @override
+  String get goodAfternoon => 'Selamat Siang,';
+
+  @override
+  String get goodEvening => 'Selamat Sore,';
+
+  @override
+  String get goodNight => 'Selamat Malam,';
+
+  @override
+  String get homeTagline => 'Mari Berkarya!';
+
+  @override
+  String failedToLoadProjects(String error) {
+    return 'Gagal memuat proyek: $error';
+  }
+
+  @override
+  String fromProject(String projectName) {
+    return 'dari: $projectName';
+  }
+
+  @override
   String get task => 'Tugas';
 
   @override

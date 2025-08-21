@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class BannerImages extends StatelessWidget {
@@ -38,13 +39,13 @@ class BannerImages extends StatelessWidget {
                 colors: [Colors.black.withOpacity(0.7), Colors.transparent],
               ),
             ),
-            child: const Padding(
-              padding: EdgeInsets.all(12.0),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
-                  'Iklan',
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.ad,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,

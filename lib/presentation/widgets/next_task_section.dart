@@ -35,7 +35,9 @@ class NextTaskSection extends StatelessWidget {
                   case RequestState.error:
                     return Center(
                       child: Text(
-                        'Gagal memuat proyek: ${state.message}',
+                        AppLocalizations.of(
+                          context,
+                        )!.failedToLoadProjects(state.message ?? ''),
                         style: const TextStyle(color: Colors.red),
                       ),
                     );
@@ -88,7 +90,7 @@ class NextTaskSection extends StatelessWidget {
         style: const TextStyle(fontWeight: FontWeight.w500),
       ),
       subtitle: Text(
-        'dari: $projectName',
+        AppLocalizations.of(context)!.fromProject(projectName),
         style: TextStyle(color: Colors.grey[600], fontSize: 12),
       ),
       trailing: IconButton(
