@@ -300,6 +300,7 @@ class DatabaseHelper {
         T.due_date,
         T.priority,
         T.description,
+        T.parent_task_id,
         T.project_id,
         P.name as project_name
       FROM tasks T
@@ -320,7 +321,7 @@ class DatabaseHelper {
       _tblTasks,
       where: 'project_id = ?',
       whereArgs: [projectId],
-      orderBy: 'order_sequence ASC',
+      orderBy: 'parent_task_id ASC, order_sequence ASC',
     );
   }
 

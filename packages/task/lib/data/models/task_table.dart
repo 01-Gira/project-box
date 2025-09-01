@@ -9,6 +9,7 @@ class TaskTable extends Equatable {
   final int? dueDate;
   final int priority;
   final String? description;
+  final int? parentTaskId;
 
   const TaskTable({
     required this.id,
@@ -18,6 +19,7 @@ class TaskTable extends Equatable {
     this.dueDate,
     this.priority = 0,
     this.description,
+    this.parentTaskId,
   });
 
   factory TaskTable.fromMap(Map<String, dynamic> map) => TaskTable(
@@ -28,6 +30,7 @@ class TaskTable extends Equatable {
     dueDate: map['due_date'],
     priority: map['priority'] ?? 0,
     description: map['description'],
+    parentTaskId: map['parent_task_id'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -37,6 +40,7 @@ class TaskTable extends Equatable {
     'due_date': dueDate,
     'priority': priority,
     'description': description,
+    'parent_task_id': parentTaskId,
   };
 
   factory TaskTable.fromEntity(Task task) => TaskTable(
@@ -47,6 +51,7 @@ class TaskTable extends Equatable {
     dueDate: task.dueDate,
     priority: task.priority,
     description: task.description,
+    parentTaskId: task.parentTaskId,
   );
 
   Task toEntity() => Task(
@@ -57,6 +62,7 @@ class TaskTable extends Equatable {
     dueDate: dueDate,
     priority: priority,
     description: description,
+    parentTaskId: parentTaskId,
   );
 
   @override
@@ -68,5 +74,6 @@ class TaskTable extends Equatable {
     dueDate,
     priority,
     description,
+    parentTaskId,
   ];
 }

@@ -13,6 +13,7 @@ class TaskSubmitted extends CreateTaskEvent {
   final String? description;
   final int? dueDate;
   final int priority;
+  final int? parentTaskId;
 
   const TaskSubmitted({
     required this.projectId,
@@ -20,5 +21,6 @@ class TaskSubmitted extends CreateTaskEvent {
     this.description,
     this.dueDate,
     this.priority = 0,
+    this.parentTaskId,
   });
 }

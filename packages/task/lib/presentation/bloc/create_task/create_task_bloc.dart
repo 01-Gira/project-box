@@ -22,12 +22,14 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
 
       resultTasks.fold(
         (failure) {
-          // Bisa default ke 1 kalau gagal ambil
           newOrder = 1;
         },
         (tasks) {
-          if (tasks.isNotEmpty) {
-            final maxOrder = tasks
+          final siblings = tasks
+              .where((t) => t.parentTaskId == event.parentTaskId)
+              .toList();
+          if (siblings.isNotEmpty) {
+            final maxOrder = siblings
                 .map((t) => t.orderSequence)
                 .reduce((a, b) => a > b ? a : b);
             newOrder = maxOrder + 1;
@@ -43,6 +45,7 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
         dueDate: event.dueDate,
         priority: event.priority,
         description: event.description,
+        parentTaskId: event.parentTaskId,
       );
 
       final result = await _saveTask(projectId: event.projectId, task: newTask);
