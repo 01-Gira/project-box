@@ -29,6 +29,7 @@ import 'package:task/presentation/bloc/remove_task/remove_task_bloc.dart';
 import 'package:task/presentation/bloc/update_task/update_task_bloc.dart';
 import 'package:task/presentation/bloc/update_task_status/update_task_status_bloc.dart';
 import 'package:task/presentation/bloc/update_tasks_order/update_tasks_order_bloc.dart';
+import 'package:task/presentation/bloc/search_tasks/search_tasks_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => di.locator<RemoveTaskBloc>()),
         BlocProvider(create: (_) => di.locator<UpdateTaskBloc>()),
         BlocProvider(create: (_) => di.locator<UpdateTaskStatusBloc>()),
+        BlocProvider(create: (_) => di.locator<SearchTasksBloc>()),
         BlocProvider(
           create: (context) => GetTasksForProjectBloc(
             getTasksForProject: di.locator<GetTasksForProject>(),

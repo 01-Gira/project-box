@@ -17,4 +17,9 @@ abstract class TaskRepository {
     required bool isCompleted,
   });
   Future<Either<Failure, List<TaskWithProjectInfo>>> getNextTasks();
+  Future<Either<Failure, List<TaskWithProjectInfo>>> searchTasks({
+    String? query,
+    DateTime? dueDate,
+    bool? isCompleted,
+  });
 }

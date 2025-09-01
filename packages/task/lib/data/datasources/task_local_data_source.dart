@@ -16,6 +16,11 @@ abstract class TaskLocalDataSource {
     required bool isCompleted,
   });
   Future<List<TaskWithProjectInfoTable>> getNextTasks();
+  Future<List<TaskWithProjectInfoTable>> searchTasks({
+    String? query,
+    int? dueDate,
+    bool? isCompleted,
+  });
 }
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource {
@@ -114,6 +119,67 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   @override
   Future<List<TaskWithProjectInfoTable>> getNextTasks() async {
     final result = await helper.getNextTasks(limit: 3);
+    return result
+        .map((data) => TaskWithProjectInfoTable.fromMap(data))
+        .toList();
+  }
+
+  @override
+  Future<List<TaskWithProjectInfoTable>> searchTasks({
+    String? query,
+    int? dueDate,
+    bool? isCompleted,
+  }) async {
+    final db = await helper.database;
+    if (db == null) return [];
+
+    final where = <String>[];
+    final whereArgs = <dynamic>[];
+
+    if (query != null && query.isNotEmpty) {
+      where.add('T.title LIKE ?');
+      whereArgs.add('%' + query + '%');
+    }
+
+    if (dueDate != null) {
+      final date = DateTime.fromMillisecondsSinceEpoch(dueDate);
+      final start = DateTime(
+        date.year,
+        date.month,
+        date.day,
+      ).millisecondsSinceEpoch;
+      final end = start + const Duration(days: 1).inMilliseconds;
+      where.add('T.due_date >= ? AND T.due_date < ?');
+      whereArgs
+        ..add(start)
+        ..add(end);
+    }
+
+    if (isCompleted != null) {
+      where.add('T.is_completed = ?');
+      whereArgs.add(isCompleted ? 1 : 0);
+    }
+
+    final whereClause = where.isNotEmpty ? 'WHERE ' + where.join(' AND ') : '';
+
+    final result = await db.rawQuery('''
+      SELECT
+        T.id,
+        T.title,
+        T.is_completed,
+        T.order_sequence,
+        T.due_date,
+        T.priority,
+        T.description,
+        T.parent_task_id,
+        T.project_id,
+        P.name as project_name
+      FROM tasks T
+      INNER JOIN projects P ON T.project_id = P.id
+      $whereClause
+      ORDER BY T.due_date ASC, T.priority DESC
+      ''', whereArgs);
+
     return result
         .map((data) => TaskWithProjectInfoTable.fromMap(data))
         .toList();

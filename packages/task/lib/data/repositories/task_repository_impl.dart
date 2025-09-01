@@ -103,4 +103,22 @@ class TaskRepositoryImpl implements TaskRepository {
       return Left(DatabaseFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<TaskWithProjectInfo>>> searchTasks({
+    String? query,
+    DateTime? dueDate,
+    bool? isCompleted,
+  }) async {
+    try {
+      final result = await localDataSource.searchTasks(
+        query: query,
+        dueDate: dueDate?.millisecondsSinceEpoch,
+        isCompleted: isCompleted,
+      );
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    }
+  }
 }

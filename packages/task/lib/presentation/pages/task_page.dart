@@ -11,6 +11,7 @@ import 'package:task/presentation/bloc/update_task_status/update_task_status_blo
 import 'package:task/presentation/bloc/update_tasks_order/update_tasks_order_bloc.dart';
 import 'package:task/presentation/widgets/task_card.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 class TaskPage extends StatefulWidget {
   final int projectId;
@@ -380,27 +381,41 @@ class _TaskPageState extends State<TaskPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: DropdownButton<String>(
-                      value: _sortOption,
-                      items: const [
-                        DropdownMenuItem(value: 'order', child: Text('Manual')),
-                        DropdownMenuItem(
-                          value: 'dueDate',
-                          child: Text('Due Date'),
+                    child: Row(
+                      children: [
+                        DropdownButton<String>(
+                          value: _sortOption,
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'order',
+                              child: Text('Manual'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'dueDate',
+                              child: Text('Due Date'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'priority',
+                              child: Text('Priority'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                _sortOption = value;
+                                _sortTasks();
+                              });
+                            }
+                          },
                         ),
-                        DropdownMenuItem(
-                          value: 'priority',
-                          child: Text('Priority'),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.search),
+                          onPressed: () {
+                            context.push('/tasks/search');
+                          },
                         ),
                       ],
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            _sortOption = value;
-                            _sortTasks();
-                          });
-                        }
-                      },
                     ),
                   ),
                   Expanded(

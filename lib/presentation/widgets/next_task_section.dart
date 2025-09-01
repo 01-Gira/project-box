@@ -2,6 +2,7 @@ import 'package:core/common/state_enum.dart';
 import 'package:core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:task/domain/entities/task_with_project_info.dart'; // Impor entitas baru Anda
 import 'package:task/presentation/bloc/next_tasks/next_tasks_bloc.dart'; // BLoC baru Anda
 import 'package:task/presentation/bloc/update_task_status/update_task_status_bloc.dart';
@@ -20,11 +21,20 @@ class NextTaskSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              AppLocalizations.of(context)!.nextTask,
-              style: textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.nextTask,
+                  style: textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () => context.push('/tasks/search'),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             BlocBuilder<NextTasksBloc, NextTasksState>(
