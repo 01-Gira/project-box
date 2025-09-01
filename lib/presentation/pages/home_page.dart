@@ -108,6 +108,11 @@ class HomePageState extends State<HomePage> {
             tooltip: 'Import',
             onPressed: _importData,
           ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () => context.push('/settings'),
+          ),
         ],
       ),
       body: SafeArea(

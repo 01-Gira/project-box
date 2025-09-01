@@ -20,6 +20,8 @@ import 'package:project_box/app_theme.dart';
 import 'package:project_box/injection.dart' as di;
 import 'package:project_box/router/app_router.dart';
 import 'package:core/notification_service.dart';
+import 'package:core/preferences_helper.dart';
+import 'package:project_box/theme_mode_notifier.dart';
 import 'package:task/domain/usecases/get_next_tasks.dart';
 import 'package:task/domain/usecases/get_tasks_for_project.dart';
 import 'package:task/presentation/bloc/create_task/create_task_bloc.dart';
@@ -40,95 +42,121 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _preferencesHelper = PreferencesHelper();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTheme();
+  }
+
+  Future<void> _loadTheme() async {
+    final mode = await _preferencesHelper.getThemeMode();
+    themeModeNotifier.value = mode;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => di.locator<GetProjectByIdBloc>()),
-        BlocProvider(create: (_) => di.locator<CreateProjectBloc>()),
-        BlocProvider(create: (_) => di.locator<EditProjectBloc>()),
-        BlocProvider(create: (_) => di.locator<RemoveProjectByIdBloc>()),
-        BlocProvider(create: (_) => di.locator<RemoveProjectsBloc>()),
-        BlocProvider(create: (_) => di.locator<UpdateProjectsStatusBloc>()),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeModeNotifier,
+      builder: (context, mode, _) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => di.locator<GetProjectByIdBloc>()),
+            BlocProvider(create: (_) => di.locator<CreateProjectBloc>()),
+            BlocProvider(create: (_) => di.locator<EditProjectBloc>()),
+            BlocProvider(create: (_) => di.locator<RemoveProjectByIdBloc>()),
+            BlocProvider(create: (_) => di.locator<RemoveProjectsBloc>()),
+            BlocProvider(create: (_) => di.locator<UpdateProjectsStatusBloc>()),
 
-        BlocProvider(create: (_) => di.locator<CreateTaskBloc>()),
-        BlocProvider(create: (_) => di.locator<UpdateTasksOrderBloc>()),
-        BlocProvider(create: (_) => di.locator<RemoveTaskBloc>()),
-        BlocProvider(create: (_) => di.locator<UpdateTaskBloc>()),
-        BlocProvider(create: (_) => di.locator<UpdateTaskStatusBloc>()),
-        BlocProvider(create: (_) => di.locator<SearchTasksBloc>()),
-        BlocProvider(
-          create: (context) => GetTasksForProjectBloc(
-            getTasksForProject: di.locator<GetTasksForProject>(),
-            createaskStatusBloc: context.read<CreateTaskBloc>(),
-            updateTaskStatusBloc: context.read<UpdateTaskStatusBloc>(),
-            updateTaskBloc: context.read<UpdateTaskBloc>(),
-            removeTaskBloc: context.read<RemoveTaskBloc>(),
-            updateTasksOrderBloc: context.read<UpdateTasksOrderBloc>(),
-          ),
-        ),
+            BlocProvider(create: (_) => di.locator<CreateTaskBloc>()),
+            BlocProvider(create: (_) => di.locator<UpdateTasksOrderBloc>()),
+            BlocProvider(create: (_) => di.locator<RemoveTaskBloc>()),
+            BlocProvider(create: (_) => di.locator<UpdateTaskBloc>()),
+            BlocProvider(create: (_) => di.locator<UpdateTaskStatusBloc>()),
+            BlocProvider(create: (_) => di.locator<SearchTasksBloc>()),
+            BlocProvider(
+              create: (context) => GetTasksForProjectBloc(
+                getTasksForProject: di.locator<GetTasksForProject>(),
+                createaskStatusBloc: context.read<CreateTaskBloc>(),
+                updateTaskStatusBloc: context.read<UpdateTaskStatusBloc>(),
+                updateTaskBloc: context.read<UpdateTaskBloc>(),
+                removeTaskBloc: context.read<RemoveTaskBloc>(),
+                updateTasksOrderBloc: context.read<UpdateTasksOrderBloc>(),
+              ),
+            ),
 
-        BlocProvider(create: (_) => di.locator<CreateProgressLogBloc>()),
-        BlocProvider(create: (_) => di.locator<RemoveProgressLogBloc>()),
-        BlocProvider(create: (_) => di.locator<UpdateProgressLogBloc>()),
-        BlocProvider(
-          create: (context) => NextTasksBloc(
-            getNextTasks: di.locator<GetNextTasks>(),
-            editProjectBloc: context.read<EditProjectBloc>(),
-            removeProjectByIdBloc: context.read<RemoveProjectByIdBloc>(),
-            createTaskBloc: context.read<CreateTaskBloc>(),
-            updateTaskStatusBloc: context.read<UpdateTaskStatusBloc>(),
-            updateTaskBloc: context.read<UpdateTaskBloc>(),
-            removeTaskBloc: context.read<RemoveTaskBloc>(),
-            updateTasksOrderBloc: context.read<UpdateTasksOrderBloc>(),
-          ),
-        ),
+            BlocProvider(create: (_) => di.locator<CreateProgressLogBloc>()),
+            BlocProvider(create: (_) => di.locator<RemoveProgressLogBloc>()),
+            BlocProvider(create: (_) => di.locator<UpdateProgressLogBloc>()),
+            BlocProvider(
+              create: (context) => NextTasksBloc(
+                getNextTasks: di.locator<GetNextTasks>(),
+                editProjectBloc: context.read<EditProjectBloc>(),
+                removeProjectByIdBloc: context.read<RemoveProjectByIdBloc>(),
+                createTaskBloc: context.read<CreateTaskBloc>(),
+                updateTaskStatusBloc: context.read<UpdateTaskStatusBloc>(),
+                updateTaskBloc: context.read<UpdateTaskBloc>(),
+                removeTaskBloc: context.read<RemoveTaskBloc>(),
+                updateTasksOrderBloc: context.read<UpdateTasksOrderBloc>(),
+              ),
+            ),
 
-        BlocProvider(
-          create: (context) => GetProgressLogsForProjectBloc(
-            getProgressLog: di.locator<GetProgressLog>(),
-            createProgressLogBloc: context
-                .read<CreateProgressLogBloc>(), // <-- Ambil dari context
-            removeProgressLogBloc: context
-                .read<RemoveProgressLogBloc>(), // <-- Ambil dari context
-            updateProgressLogBloc: context
-                .read<UpdateProgressLogBloc>(), // <-- Ambil dari context
-          ),
-        ),
+            BlocProvider(
+              create: (context) => GetProgressLogsForProjectBloc(
+                getProgressLog: di.locator<GetProgressLog>(),
+                createProgressLogBloc: context
+                    .read<CreateProgressLogBloc>(), // <-- Ambil dari context
+                removeProgressLogBloc: context
+                    .read<RemoveProgressLogBloc>(), // <-- Ambil dari context
+                updateProgressLogBloc: context
+                    .read<UpdateProgressLogBloc>(), // <-- Ambil dari context
+              ),
+            ),
 
-        BlocProvider(
-          create: (context) => GetProjectItemsBloc(
-            getProjectItems: di.locator<GetProjectItems>(),
-            createProjectBloc: context.read<CreateProjectBloc>(),
-            editProjectBloc: context.read<EditProjectBloc>(),
-            removeProjectByIdBloc: context.read<RemoveProjectByIdBloc>(),
-            updateProjectsStatusBloc: context.read<UpdateProjectsStatusBloc>(),
-            removeProjectsBloc: context.read<RemoveProjectsBloc>(),
-            updateTaskStatusBloc: context.read<UpdateTaskStatusBloc>(),
-            updateTaskBloc: context.read<UpdateTaskBloc>(),
-            removeTaskBloc: context.read<RemoveTaskBloc>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => DashboardStatsBloc(
-            getDashboardStats: di.locator<GetDashboardStats>(),
-            editProjectBloc: context.read<EditProjectBloc>(),
-            removeProjectByIdBloc: context.read<RemoveProjectByIdBloc>(),
-            updateTaskStatusBloc: context.read<UpdateTaskStatusBloc>(),
-            removeTaskBloc: context.read<RemoveTaskBloc>(),
-          ),
-        ),
-      ],
-      child: AppWithRouter(),
+            BlocProvider(
+              create: (context) => GetProjectItemsBloc(
+                getProjectItems: di.locator<GetProjectItems>(),
+                createProjectBloc: context.read<CreateProjectBloc>(),
+                editProjectBloc: context.read<EditProjectBloc>(),
+                removeProjectByIdBloc: context.read<RemoveProjectByIdBloc>(),
+                updateProjectsStatusBloc: context
+                    .read<UpdateProjectsStatusBloc>(),
+                removeProjectsBloc: context.read<RemoveProjectsBloc>(),
+                updateTaskStatusBloc: context.read<UpdateTaskStatusBloc>(),
+                updateTaskBloc: context.read<UpdateTaskBloc>(),
+                removeTaskBloc: context.read<RemoveTaskBloc>(),
+              ),
+            ),
+            BlocProvider(
+              create: (context) => DashboardStatsBloc(
+                getDashboardStats: di.locator<GetDashboardStats>(),
+                editProjectBloc: context.read<EditProjectBloc>(),
+                removeProjectByIdBloc: context.read<RemoveProjectByIdBloc>(),
+                updateTaskStatusBloc: context.read<UpdateTaskStatusBloc>(),
+                removeTaskBloc: context.read<RemoveTaskBloc>(),
+              ),
+            ),
+          ],
+          child: AppWithRouter(themeMode: mode),
+        );
+      },
     );
   }
 }
 
 class AppWithRouter extends StatelessWidget {
-  const AppWithRouter({super.key});
+  const AppWithRouter({super.key, required this.themeMode});
+
+  final ThemeMode themeMode;
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +164,7 @@ class AppWithRouter extends StatelessWidget {
       title: 'Project BOX',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: AppRouter.router,
