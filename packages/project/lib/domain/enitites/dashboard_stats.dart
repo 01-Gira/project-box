@@ -5,12 +5,16 @@ class DashboardStats extends Equatable {
   final int totalTasksDone;
   final int productiveStreak;
   final List<int> dailyTaskCompletions;
+  final List<int> burnDownData;
+  final double velocity;
 
   const DashboardStats({
     required this.completedProjects,
     required this.totalTasksDone,
     required this.productiveStreak,
     required this.dailyTaskCompletions,
+    required this.burnDownData,
+    required this.velocity,
   });
 
   @override
@@ -19,5 +23,7 @@ class DashboardStats extends Equatable {
     totalTasksDone,
     productiveStreak,
     dailyTaskCompletions,
+    burnDownData,
+    velocity,
   ];
 }

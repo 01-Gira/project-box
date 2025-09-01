@@ -54,6 +54,7 @@ import 'package:task/presentation/bloc/update_tasks_order/update_tasks_order_blo
 import 'package:task/domain/usecases/search_tasks.dart';
 import 'package:task/presentation/bloc/search_tasks/search_tasks_bloc.dart';
 import 'package:core/notification_service.dart';
+import 'package:core/analytics/analytics_service.dart';
 
 final locator = GetIt.instance;
 
@@ -167,7 +168,10 @@ Future<void> init() async {
   // Repository
   // Project
   locator.registerLazySingleton<ProjectRepository>(
-    () => ProjectRepositoryImpl(localDataSource: locator()),
+    () => ProjectRepositoryImpl(
+      localDataSource: locator(),
+      analyticsService: locator(),
+    ),
   );
   // task
   locator.registerLazySingleton<TaskRepository>(
@@ -199,5 +203,8 @@ Future<void> init() async {
   locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
   locator.registerLazySingleton<NotificationService>(
     () => NotificationService(),
+  );
+  locator.registerLazySingleton<AnalyticsService>(
+    () => const AnalyticsService(),
   );
 }
