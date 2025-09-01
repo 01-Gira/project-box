@@ -127,6 +127,49 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
+  Widget _buildTaskItem(
+    Task task,
+    ColorScheme colorScheme,
+    AppLocalizations l10n, {
+    double indent = 0,
+  }) {
+    final children = _localTasks
+        .where((t) => t.parentTaskId == task.id)
+        .toList();
+    final content = _buildDismissibleTask(
+      task,
+      _localTasks.indexOf(task),
+      colorScheme,
+      l10n,
+      false,
+    );
+
+    if (children.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.only(left: indent),
+        child: content,
+      );
+    } else {
+      return Padding(
+        padding: EdgeInsets.only(left: indent),
+        child: ExpansionTile(
+          key: ValueKey(task.id),
+          title: content,
+          children: children
+              .map(
+                (child) => _buildTaskItem(
+                  child,
+                  colorScheme,
+                  l10n,
+                  indent: indent + 16,
+                ),
+              )
+              .toList(),
+        ),
+      );
+    }
+  }
+
   Future<void> _showEditTaskDialog(Task task, AppLocalizations l10n) async {
     final TextEditingController titleController = TextEditingController(
       text: task.title,
@@ -232,6 +275,7 @@ class _TaskPageState extends State<TaskPage> {
             : result['description'],
         priority: result['priority'] as int,
         dueDate: result['dueDate'] as int?,
+        parentTaskId: task.parentTaskId,
       );
 
       if (mounted) {
@@ -360,51 +404,15 @@ class _TaskPageState extends State<TaskPage> {
                     ),
                   ),
                   Expanded(
-                    child: _sortOption == 'order'
-                        ? ReorderableListView.builder(
-                            padding: const EdgeInsets.all(16.0),
-                            itemCount: _localTasks.length,
-                            itemBuilder: (context, index) {
-                              final task = _localTasks[index];
-
-                              return _buildDismissibleTask(
-                                task,
-                                index,
-                                colorScheme,
-                                l10n,
-                                true,
-                              );
-                            },
-                            onReorder: (int oldIndex, int newIndex) {
-                              setState(() {
-                                if (newIndex > oldIndex) {
-                                  newIndex -= 1;
-                                }
-                                final Task item = _localTasks.removeAt(
-                                  oldIndex,
-                                );
-                                _localTasks.insert(newIndex, item);
-                              });
-
-                              context.read<UpdateTasksOrderBloc>().add(
-                                UpdateTaskOrderRequested(tasks: _localTasks),
-                              );
-                            },
+                    child: ListView(
+                      padding: const EdgeInsets.all(16.0),
+                      children: _localTasks
+                          .where((task) => task.parentTaskId == null)
+                          .map(
+                            (task) => _buildTaskItem(task, colorScheme, l10n),
                           )
-                        : ListView.builder(
-                            padding: const EdgeInsets.all(16.0),
-                            itemCount: _localTasks.length,
-                            itemBuilder: (context, index) {
-                              final task = _localTasks[index];
-                              return _buildDismissibleTask(
-                                task,
-                                index,
-                                colorScheme,
-                                l10n,
-                                false,
-                              );
-                            },
-                          ),
+                          .toList(),
+                    ),
                   ),
                 ],
               );

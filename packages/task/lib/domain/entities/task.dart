@@ -8,6 +8,7 @@ class Task extends Equatable {
   final int? dueDate;
   final int priority;
   final String? description;
+  final int? parentTaskId;
 
   const Task({
     required this.id,
@@ -17,6 +18,7 @@ class Task extends Equatable {
     this.dueDate,
     this.priority = 0,
     this.description,
+    this.parentTaskId,
   });
 
   @override
@@ -28,5 +30,6 @@ class Task extends Equatable {
     dueDate,
     priority,
     description,
+    parentTaskId,
   ];
 }
