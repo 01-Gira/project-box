@@ -9,7 +9,7 @@ abstract class TaskLocalDataSource {
   Future<String> removeTask(int id);
   Future<List<TaskTable>> getTasksForProject(int id);
   Future<String> updateTasksOrder(List<TaskTable> task);
-  Future<String> updateTaskById({required int id, required String title});
+  Future<String> updateTask(TaskTable task);
   Future<String> updateTaskStatusById({
     required int id,
     required bool isCompleted,
@@ -47,12 +47,9 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   }
 
   @override
-  Future<String> updateTaskById({
-    required int id,
-    required String title,
-  }) async {
+  Future<String> updateTask(TaskTable task) async {
     try {
-      await helper.updateTask(id, title);
+      await helper.updateTask(task.id, task.toJson());
       return 'Task updated';
     } catch (e) {
       throw DatabaseException(e.toString());

@@ -34,12 +34,11 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
-  Future<Either<Failure, String>> updateTaskById({
-    required int id,
-    required String title,
-  }) async {
+  Future<Either<Failure, String>> updateTask(entity.Task task) async {
     try {
-      final result = await localDataSource.updateTaskById(id: id, title: title);
+      final result = await localDataSource.updateTask(
+        TaskTable.fromEntity(task),
+      );
       return Right(result);
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(e.message));

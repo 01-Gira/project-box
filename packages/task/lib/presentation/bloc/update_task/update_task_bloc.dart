@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:core/common/state_enum.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task/domain/usecases/update_task.dart';
+import 'package:task/domain/entities/task.dart';
 
 part 'update_task_event.dart';
 part 'update_task_state.dart';
@@ -13,7 +14,7 @@ class UpdateTaskBloc extends Bloc<UpdateTaskEvent, UpdateTaskState> {
     on<UpdateTaskRequested>((event, emit) async {
       emit(state.copyWith(state: RequestState.loading));
 
-      final result = await _updateTask(id: event.id, title: event.title);
+      final result = await _updateTask(event.task);
 
       result.fold(
         (failure) => emit(

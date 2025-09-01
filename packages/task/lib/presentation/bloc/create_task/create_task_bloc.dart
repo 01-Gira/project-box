@@ -40,6 +40,9 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
         title: event.title,
         isCompleted: 0,
         orderSequence: newOrder,
+        dueDate: event.dueDate,
+        priority: event.priority,
+        description: event.description,
       );
 
       final result = await _saveTask(projectId: event.projectId, task: newTask);
