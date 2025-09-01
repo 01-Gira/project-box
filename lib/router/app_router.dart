@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project/presentation/pages/create_project_page.dart';
 import 'package:project/presentation/pages/detail_project_page.dart';
@@ -7,7 +8,12 @@ import 'package:project/presentation/pages/search_project_page.dart';
 import 'package:project_box/presentation/pages/home_page.dart';
 
 class AppRouter {
-  late final GoRouter router = GoRouter(
+  AppRouter._();
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
+  static final GoRouter router = GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: '/home',
     routes: [
       GoRoute(path: '/home', builder: (context, state) => HomePage()),

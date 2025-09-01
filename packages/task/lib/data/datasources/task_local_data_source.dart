@@ -1,5 +1,6 @@
 import 'package:core/common/exception.dart';
 import 'package:core/data/datasources/db/database_helper.dart';
+import 'package:core/notification_service.dart';
 import 'package:task/data/models/task_table.dart';
 import 'package:task/data/models/task_with_project_info_table.dart';
 
@@ -19,8 +20,12 @@ abstract class TaskLocalDataSource {
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   final DatabaseHelper helper;
+  final NotificationService notificationService;
 
-  TaskLocalDataSourceImpl({required this.helper});
+  TaskLocalDataSourceImpl({
+    required this.helper,
+    required this.notificationService,
+  });
 
   @override
   Future<List<TaskTable>> getTasksForProject(int id) async {
@@ -38,8 +43,14 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
     required TaskTable task,
   }) async {
     try {
-      await helper.insertTask(projectId, task.toJson());
-
+      final id = await helper.insertTask(projectId, task.toJson());
+      if (task.dueDate != null) {
+        await notificationService.scheduleTaskReminder(
+          id: id,
+          title: task.title,
+          scheduledTime: DateTime.fromMillisecondsSinceEpoch(task.dueDate!),
+        );
+      }
       return 'Added to project';
     } catch (e) {
       throw DatabaseException(e.toString());
@@ -50,6 +61,15 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   Future<String> updateTask(TaskTable task) async {
     try {
       await helper.updateTask(task.id, task.toJson());
+      if (task.dueDate != null) {
+        await notificationService.scheduleTaskReminder(
+          id: task.id,
+          title: task.title,
+          scheduledTime: DateTime.fromMillisecondsSinceEpoch(task.dueDate!),
+        );
+      } else {
+        await notificationService.cancelTaskReminder(task.id);
+      }
       return 'Task updated';
     } catch (e) {
       throw DatabaseException(e.toString());
