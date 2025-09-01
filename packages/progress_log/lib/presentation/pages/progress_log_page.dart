@@ -9,6 +9,7 @@ import 'package:progress_log/presentation/bloc/get_progress_logs/get_progress_lo
 import 'package:progress_log/presentation/bloc/remove_progress_log/remove_progress_log_bloc.dart';
 import 'package:progress_log/presentation/bloc/update_progress_log/update_progress_log_bloc.dart';
 import 'package:progress_log/presentation/widgets/progress_log_card.dart';
+import 'package:progress_log/presentation/widgets/progress_log_chart.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProgressLogPage extends StatefulWidget {
@@ -192,82 +193,123 @@ class _ProgressLogState extends State<ProgressLogPage> {
                     return Center(child: Text(l10n.emptyLog));
                   }
 
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(16.0),
-                    itemCount: _localProgressLogs.length,
-                    itemBuilder: (context, index) {
-                      final log = _localProgressLogs[index];
-
-                      return Dismissible(
-                        key: ValueKey(log.id),
-                        background: Container(
-                          color: colorScheme.primary,
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Icon(
-                            Icons.edit_outlined,
-                            color: colorScheme.onPrimary,
-                          ),
-                        ),
-                        secondaryBackground: Container(
-                          color: colorScheme.error,
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Icon(
-                            Icons.delete_outline,
-                            color: colorScheme.onError,
-                          ),
-                        ),
-                        confirmDismiss: (direction) async {
-                          if (direction == DismissDirection.startToEnd) {
-                            await _showEditLogDialog(log, l10n);
-                            return false;
-                          } else {
-                            return await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text(l10n.confirmDelete),
-                                  content: Text(l10n.confirmationDelete),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
-                                      child: Text(l10n.cancel),
-                                    ),
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(true),
-                                      child: Text(
-                                        l10n.delete,
-                                        style: TextStyle(
-                                          color: colorScheme.error,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                        },
-                        onDismissed: (direction) {
-                          if (direction == DismissDirection.endToStart) {
-                            context.read<RemoveProgressLogBloc>().add(
-                              DeleteProgressLogRequested(logId: log.id),
-                            );
-                            setState(() {
-                              _localProgressLogs.removeAt(index);
-                            });
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Expanded(child: ProgressLogCard(log: log)),
+                  return DefaultTabController(
+                    length: 2,
+                    child: Column(
+                      children: [
+                        TabBar(
+                          tabs: [
+                            Tab(text: l10n.logs),
+                            Tab(text: l10n.stats),
                           ],
                         ),
-                      );
-                    },
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              ListView.builder(
+                                padding: const EdgeInsets.all(16.0),
+                                itemCount: _localProgressLogs.length,
+                                itemBuilder: (context, index) {
+                                  final log = _localProgressLogs[index];
+
+                                  return Dismissible(
+                                    key: ValueKey(log.id),
+                                    background: Container(
+                                      color: colorScheme.primary,
+                                      alignment: Alignment.centerLeft,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0,
+                                      ),
+                                      child: Icon(
+                                        Icons.edit_outlined,
+                                        color: colorScheme.onPrimary,
+                                      ),
+                                    ),
+                                    secondaryBackground: Container(
+                                      color: colorScheme.error,
+                                      alignment: Alignment.centerRight,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0,
+                                      ),
+                                      child: Icon(
+                                        Icons.delete_outline,
+                                        color: colorScheme.onError,
+                                      ),
+                                    ),
+                                    confirmDismiss: (direction) async {
+                                      if (direction ==
+                                          DismissDirection.startToEnd) {
+                                        await _showEditLogDialog(log, l10n);
+                                        return false;
+                                      } else {
+                                        return await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(l10n.confirmDelete),
+                                              content: Text(
+                                                l10n.confirmationDelete,
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () => Navigator.of(
+                                                    context,
+                                                  ).pop(false),
+                                                  child: Text(l10n.cancel),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () => Navigator.of(
+                                                    context,
+                                                  ).pop(true),
+                                                  child: Text(
+                                                    l10n.delete,
+                                                    style: TextStyle(
+                                                      color: colorScheme.error,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
+                                    onDismissed: (direction) {
+                                      if (direction ==
+                                          DismissDirection.endToStart) {
+                                        context
+                                            .read<RemoveProgressLogBloc>()
+                                            .add(
+                                              DeleteProgressLogRequested(
+                                                logId: log.id,
+                                              ),
+                                            );
+                                        setState(() {
+                                          _localProgressLogs.removeAt(index);
+                                        });
+                                      }
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: ProgressLogCard(log: log),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: ProgressLogChart(
+                                  logs: _localProgressLogs,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 default:
                   return Center(child: Text(l10n.emptyLog));
