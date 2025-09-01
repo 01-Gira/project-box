@@ -59,6 +59,9 @@ class DatabaseHelper {
         title TEXT NOT NULL,
         is_completed INTEGER NOT NULL DEFAULT 0,
         order_sequence INTEGER,
+        due_date INTEGER,
+        priority INTEGER,
+        description TEXT,
         FOREIGN KEY (project_id) REFERENCES $_tblProjects (id) ON DELETE CASCADE,
         FOREIGN KEY (parent_task_id) REFERENCES $_tblTasks (id) ON DELETE CASCADE
       );
@@ -294,12 +297,15 @@ class DatabaseHelper {
         T.title,
         T.is_completed,
         T.order_sequence,
+        T.due_date,
+        T.priority,
+        T.description,
         T.project_id,
-        P.name as project_name 
+        P.name as project_name
       FROM tasks T
       INNER JOIN projects P ON T.project_id = P.id
       WHERE T.is_completed = 0 AND P.status = 'Active'
-      ORDER BY T.order_sequence ASC, P.creation_date DESC
+      ORDER BY T.priority DESC, T.due_date ASC, T.order_sequence ASC, P.creation_date DESC
       LIMIT ?
     ''',
       [limit],
@@ -318,14 +324,9 @@ class DatabaseHelper {
     );
   }
 
-  Future<int> updateTask(int id, String title) async {
+  Future<int> updateTask(int id, Map<String, dynamic> task) async {
     final db = await database;
-    return await db!.update(
-      _tblTasks,
-      {'title': title}, // Ini harus Map
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db!.update(_tblTasks, task, where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> deleteTask(int id) async {

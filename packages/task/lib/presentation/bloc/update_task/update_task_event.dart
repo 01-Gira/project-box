@@ -8,8 +8,7 @@ abstract class UpdateTaskEvent extends Equatable {
 }
 
 class UpdateTaskRequested extends UpdateTaskEvent {
-  final int id;
-  final String title;
+  final Task task;
 
-  const UpdateTaskRequested({required this.id, required this.title});
+  const UpdateTaskRequested({required this.task});
 }

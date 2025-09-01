@@ -7,6 +7,9 @@ class TaskWithProjectInfoTable extends Equatable {
   final String title;
   final int isCompleted;
   final int orderSequence;
+  final int? dueDate;
+  final int priority;
+  final String? description;
   final int projectId;
   final String projectName;
 
@@ -15,6 +18,9 @@ class TaskWithProjectInfoTable extends Equatable {
     required this.title,
     required this.isCompleted,
     required this.orderSequence,
+    this.dueDate,
+    this.priority = 0,
+    this.description,
     required this.projectId,
     required this.projectName,
   });
@@ -25,6 +31,9 @@ class TaskWithProjectInfoTable extends Equatable {
       title: map['title'],
       isCompleted: map['is_completed'],
       orderSequence: map['order_sequence'],
+      dueDate: map['due_date'],
+      priority: map['priority'] ?? 0,
+      description: map['description'],
       projectId: map['project_id'],
       projectName: map['project_name'],
     );
@@ -38,6 +47,9 @@ class TaskWithProjectInfoTable extends Equatable {
         title: title,
         isCompleted: isCompleted,
         orderSequence: orderSequence,
+        dueDate: dueDate,
+        priority: priority,
+        description: description,
       ),
       projectName: projectName,
     );
@@ -49,6 +61,9 @@ class TaskWithProjectInfoTable extends Equatable {
     title,
     isCompleted,
     orderSequence,
+    dueDate,
+    priority,
+    description,
     projectId,
     projectName,
   ];
