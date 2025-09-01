@@ -91,5 +91,26 @@
 
     "confirmDelete" : "Konfirmasi Hapus",
     "confirmationDelete" : "Apakah anda yakin ingin menghapus ini?",
-    "changeStatus" : "Ubah Status"
+    "changeStatus" : "Ubah Status",
+
+    "appTitle": "Project Box",
+    "projectBoxExport": "Ekspor Project Box",
+    "export": "Ekspor",
+    "import": "Impor",
+    "settings": "Pengaturan",
+    "system": "Sistem",
+    "light": "Terang",
+    "dark": "Gelap",
+    "noData": "Tidak ada data",
+    "manual": "Manual",
+    "dueDate": "Tanggal Jatuh Tempo",
+    "priority": "Prioritas",
+    "priorityLabel": "P: {priority}",
+    "@priorityLabel": {
+        "placeholders": {
+            "priority": {
+                "type": "String"
+            }
+        }
+    }
 }

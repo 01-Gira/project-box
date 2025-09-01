@@ -1,3 +1,8 @@
 arb-dir: lib/l10n # Direktori tempat menyimpan file terjemahan
 template-arb-file: app_en.arb # File template (bahasa default)
 output-localization-file: app_localizations.dart # File Dart yang akan digenerate
+preferred-supported-locales:
+  - en
+  - id
+  - es
+  - fr

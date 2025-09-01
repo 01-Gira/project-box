@@ -198,4 +198,45 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get changeStatus => 'Ubah Status';
+
+  @override
+  String get appTitle => 'Project Box';
+
+  @override
+  String get projectBoxExport => 'Ekspor Project Box';
+
+  @override
+  String get export => 'Ekspor';
+
+  @override
+  String get import => 'Impor';
+
+  @override
+  String get settings => 'Pengaturan';
+
+  @override
+  String get system => 'Sistem';
+
+  @override
+  String get light => 'Terang';
+
+  @override
+  String get dark => 'Gelap';
+
+  @override
+  String get noData => 'Tidak ada data';
+
+  @override
+  String get manual => 'Manual';
+
+  @override
+  String get dueDate => 'Tanggal Jatuh Tempo';
+
+  @override
+  String get priority => 'Prioritas';
+
+  @override
+  String priorityLabel(String priority) {
+    return 'P: $priority';
+  }
 }

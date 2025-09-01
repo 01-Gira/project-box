@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:core/l10n/app_localizations.dart';
 import 'package:core/preferences_helper.dart';
 import 'package:project_box/theme_mode_notifier.dart';
 
@@ -22,30 +23,31 @@ class _SettingsPageState extends State<SettingsPage> {
     _preferencesHelper.setThemeMode(mode);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
-      body: ListView(
-        children: [
-          RadioListTile<ThemeMode>(
-            title: const Text('System'),
-            value: ThemeMode.system,
-            groupValue: _themeMode,
-            onChanged: _onThemeChanged,
-          ),
-          RadioListTile<ThemeMode>(
-            title: const Text('Light'),
-            value: ThemeMode.light,
-            groupValue: _themeMode,
-            onChanged: _onThemeChanged,
-          ),
-          RadioListTile<ThemeMode>(
-            title: const Text('Dark'),
-            value: ThemeMode.dark,
-            groupValue: _themeMode,
-            onChanged: _onThemeChanged,
-          ),
+    @override
+    Widget build(BuildContext context) {
+      final l10n = AppLocalizations.of(context)!;
+      return Scaffold(
+        appBar: AppBar(title: Text(l10n.settings)),
+        body: ListView(
+          children: [
+            RadioListTile<ThemeMode>(
+              title: Text(l10n.system),
+              value: ThemeMode.system,
+              groupValue: _themeMode,
+              onChanged: _onThemeChanged,
+            ),
+            RadioListTile<ThemeMode>(
+              title: Text(l10n.light),
+              value: ThemeMode.light,
+              groupValue: _themeMode,
+              onChanged: _onThemeChanged,
+            ),
+            RadioListTile<ThemeMode>(
+              title: Text(l10n.dark),
+              value: ThemeMode.dark,
+              groupValue: _themeMode,
+              onChanged: _onThemeChanged,
+            ),
         ],
       ),
     );
