@@ -19,6 +19,7 @@ import 'package:project/presentation/bloc/update_projects_status/update_projects
 import 'package:project_box/app_theme.dart';
 import 'package:project_box/injection.dart' as di;
 import 'package:project_box/router/app_router.dart';
+import 'package:core/notification_service.dart';
 import 'package:task/domain/usecases/get_next_tasks.dart';
 import 'package:task/domain/usecases/get_tasks_for_project.dart';
 import 'package:task/presentation/bloc/create_task/create_task_bloc.dart';
@@ -32,6 +33,9 @@ import 'package:task/presentation/bloc/update_tasks_order/update_tasks_order_blo
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
+  await di.locator<NotificationService>().init((payload) {
+    AppRouter.router.go('/home');
+  });
   runApp(const MyApp());
 }
 
@@ -133,7 +137,7 @@ class AppWithRouter extends StatelessWidget {
       themeMode: ThemeMode.system,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      routerConfig: AppRouter().router,
+      routerConfig: AppRouter.router,
     );
   }
 }

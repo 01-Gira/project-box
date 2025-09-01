@@ -51,6 +51,7 @@ import 'package:task/presentation/bloc/remove_task/remove_task_bloc.dart';
 import 'package:task/presentation/bloc/update_task/update_task_bloc.dart';
 import 'package:task/presentation/bloc/update_task_status/update_task_status_bloc.dart';
 import 'package:task/presentation/bloc/update_tasks_order/update_tasks_order_bloc.dart';
+import 'package:core/notification_service.dart';
 
 final locator = GetIt.instance;
 
@@ -180,7 +181,10 @@ Future<void> init() async {
   );
   // task
   locator.registerLazySingleton<TaskLocalDataSource>(
-    () => TaskLocalDataSourceImpl(helper: locator()),
+    () => TaskLocalDataSourceImpl(
+      helper: locator(),
+      notificationService: locator(),
+    ),
   );
   // Log
   locator.registerLazySingleton<ProgressLogLocalDataSource>(
@@ -189,4 +193,7 @@ Future<void> init() async {
 
   // helper
   locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
+  locator.registerLazySingleton<NotificationService>(
+    () => NotificationService(),
+  );
 }
