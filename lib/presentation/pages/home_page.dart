@@ -9,6 +9,7 @@ import 'package:project_box/presentation/widgets/home_header.dart';
 import 'package:project_box/presentation/widgets/next_task_section.dart';
 import 'package:project_box/presentation/widgets/recent_projects.dart';
 import 'package:project_box/presentation/widgets/stats_info_section.dart';
+import 'package:project_box/presentation/widgets/task_completion_chart.dart';
 import 'package:task/presentation/bloc/next_tasks/next_tasks_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -47,7 +48,9 @@ class HomePageState extends State<HomePage> {
             // const SizedBox(height: 16),
             BannerImages(height: 180),
             const SizedBox(height: 16),
-            StatsInfoSection(),
+            const StatsInfoSection(),
+            const SizedBox(height: 16),
+            const TaskCompletionChart(),
             const SizedBox(height: 16),
             NextTaskSection(),
             const SizedBox(height: 16),

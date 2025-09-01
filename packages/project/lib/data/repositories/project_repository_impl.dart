@@ -93,6 +93,10 @@ class ProjectRepositoryImpl implements ProjectRepository {
           completedProjects: result['completedProjects'] ?? 0,
           totalTasksDone: result['totalTasksDone'] ?? 0,
           productiveStreak: result['productiveStreak'] ?? 0,
+          dailyTaskCompletions:
+              (result['dailyTaskCompletions'] as List<dynamic>? ?? [])
+                  .map((e) => e as int)
+                  .toList(),
         ),
       );
     } on DatabaseException catch (e) {
