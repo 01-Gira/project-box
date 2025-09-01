@@ -4,6 +4,7 @@ import 'package:project/presentation/pages/create_project_page.dart';
 import 'package:project/presentation/pages/detail_project_page.dart';
 import 'package:project/presentation/pages/edit_project_page.dart';
 import 'package:project/presentation/pages/search_project_page.dart';
+import 'package:task/presentation/pages/search_task_page.dart';
 
 import 'package:project_box/presentation/pages/home_page.dart';
 
@@ -20,6 +21,10 @@ class AppRouter {
       GoRoute(
         path: '/search',
         builder: (context, state) => SearchProjectPage(),
+      ),
+      GoRoute(
+        path: '/tasks/search',
+        builder: (context, state) => const SearchTaskPage(),
       ),
 
       GoRoute(

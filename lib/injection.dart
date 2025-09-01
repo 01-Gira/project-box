@@ -51,6 +51,8 @@ import 'package:task/presentation/bloc/remove_task/remove_task_bloc.dart';
 import 'package:task/presentation/bloc/update_task/update_task_bloc.dart';
 import 'package:task/presentation/bloc/update_task_status/update_task_status_bloc.dart';
 import 'package:task/presentation/bloc/update_tasks_order/update_tasks_order_bloc.dart';
+import 'package:task/domain/usecases/search_tasks.dart';
+import 'package:task/presentation/bloc/search_tasks/search_tasks_bloc.dart';
 import 'package:core/notification_service.dart';
 
 final locator = GetIt.instance;
@@ -76,6 +78,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => UpdateTask(locator()));
   locator.registerLazySingleton(() => UpdateTaskStatus(locator()));
   locator.registerLazySingleton(() => GetNextTasks(locator()));
+  locator.registerLazySingleton(() => SearchTasks(locator()));
 
   // Log
   locator.registerLazySingleton(() => GetProgressLog(locator()));
@@ -121,6 +124,7 @@ Future<void> init() async {
   locator.registerFactory(() => RemoveTaskBloc(locator()));
   locator.registerFactory(() => UpdateTaskBloc(locator()));
   locator.registerFactory(() => UpdateTaskStatusBloc(locator()));
+  locator.registerFactory(() => SearchTasksBloc(searchTasks: locator()));
 
   locator.registerFactory(
     () => GetTasksForProjectBloc(
