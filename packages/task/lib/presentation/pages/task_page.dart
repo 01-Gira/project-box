@@ -208,12 +208,13 @@ class _TaskPageState extends State<TaskPage> {
                 const SizedBox(height: 8),
                 TextField(
                   controller: descriptionController,
-                  decoration: const InputDecoration(labelText: 'Description'),
+                  decoration:
+                      InputDecoration(labelText: l10n.projectDescriptionLabel),
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<int>(
                   value: priority,
-                  decoration: const InputDecoration(labelText: 'Priority'),
+                  decoration: InputDecoration(labelText: l10n.priority),
                   items: List.generate(
                     5,
                     (index) =>
@@ -228,7 +229,7 @@ class _TaskPageState extends State<TaskPage> {
                       child: Text(
                         dueDate != null
                             ? DateFormat.yMd().format(dueDate!)
-                            : 'Due Date',
+                            : l10n.dueDate,
                       ),
                     ),
                     TextButton(
@@ -385,18 +386,18 @@ class _TaskPageState extends State<TaskPage> {
                       children: [
                         DropdownButton<String>(
                           value: _sortOption,
-                          items: const [
+                          items: [
                             DropdownMenuItem(
                               value: 'order',
-                              child: Text('Manual'),
+                              child: Text(l10n.manual),
                             ),
                             DropdownMenuItem(
                               value: 'dueDate',
-                              child: Text('Due Date'),
+                              child: Text(l10n.dueDate),
                             ),
                             DropdownMenuItem(
                               value: 'priority',
-                              child: Text('Priority'),
+                              child: Text(l10n.priority),
                             ),
                           ],
                           onChanged: (value) {

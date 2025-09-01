@@ -1,3 +1,4 @@
+import 'package:core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:task/domain/entities/task.dart';
 import 'package:intl/intl.dart';
@@ -49,7 +50,10 @@ class TaskCard extends StatelessWidget {
                     ),
                   ),
                 const SizedBox(width: 8),
-                Text('P: ${task.priority}'),
+                  Text(
+                    AppLocalizations.of(context)!
+                        .priorityLabel(task.priority.toString()),
+                  ),
               ],
             ),
           ],

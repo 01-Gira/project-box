@@ -153,15 +153,16 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class AppWithRouter extends StatelessWidget {
-  const AppWithRouter({super.key, required this.themeMode});
+  class AppWithRouter extends StatelessWidget {
+    const AppWithRouter({super.key, required this.themeMode});
 
   final ThemeMode themeMode;
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Project BOX',
+    @override
+    Widget build(BuildContext context) {
+      final l10n = AppLocalizations.of(context)!;
+      return MaterialApp.router(
+        title: l10n.appTitle,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,

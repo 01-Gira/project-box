@@ -1,4 +1,5 @@
 import 'package:core/common/state_enum.dart';
+import 'package:core/l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,9 +28,13 @@ class TaskCompletionChart extends StatelessWidget {
                 case RequestState.loaded:
                   final stats = state.stats;
                   final data = stats?.dailyTaskCompletions ?? [];
-                  if (data.isEmpty) {
-                    return const Center(child: Text('No data'));
-                  }
+                    if (data.isEmpty) {
+                      return Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.noData,
+                        ),
+                      );
+                    }
                   final now = DateTime.now();
                   final labels = List.generate(data.length, (index) {
                     final date = now.subtract(

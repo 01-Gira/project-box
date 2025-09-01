@@ -252,12 +252,13 @@ class _DetailProjectPageState extends State<DetailProjectPage>
                 const SizedBox(height: 8),
                 TextField(
                   controller: _taskDescriptionController,
-                  decoration: const InputDecoration(labelText: 'Description'),
+                  decoration:
+                      InputDecoration(labelText: l10n.projectDescriptionLabel),
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<int>(
                   value: _taskPriority,
-                  decoration: const InputDecoration(labelText: 'Priority'),
+                  decoration: InputDecoration(labelText: l10n.priority),
                   items: List.generate(
                     5,
                     (index) =>
@@ -273,7 +274,7 @@ class _DetailProjectPageState extends State<DetailProjectPage>
                       child: Text(
                         _taskDueDate != null
                             ? DateFormat.yMd().format(_taskDueDate!)
-                            : 'Due Date',
+                            : l10n.dueDate,
                       ),
                     ),
                     TextButton(
@@ -491,11 +492,11 @@ class _InfoView extends StatelessWidget {
         const SizedBox(height: 8),
         Text(project.description, style: theme.textTheme.bodyMedium),
         const Divider(height: 40),
-        _InfoTile(
-          icon: Icons.label_outline,
-          title: 'Status',
-          subtitle: project.status,
-        ),
+          _InfoTile(
+            icon: Icons.label_outline,
+            title: l10n.projectStatusLabel,
+            subtitle: project.status,
+          ),
         _InfoTile(
           icon: Icons.calendar_today_outlined,
           title: l10n.createdDate,

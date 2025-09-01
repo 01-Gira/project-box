@@ -91,5 +91,26 @@
 
     "confirmDelete" : "Confirmation Delete",
     "confirmationDelete" : "Are you sure want to delete this?",
-    "changeStatus" : "Change Status"
+    "changeStatus" : "Change Status",
+
+    "appTitle": "Project Box",
+    "projectBoxExport": "Project Box export",
+    "export": "Export",
+    "import": "Import",
+    "settings": "Settings",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark",
+    "noData": "No data",
+    "manual": "Manual",
+    "dueDate": "Due Date",
+    "priority": "Priority",
+    "priorityLabel": "P: {priority}",
+    "@priorityLabel": {
+        "placeholders": {
+            "priority": {
+                "type": "String"
+            }
+        }
+    }
 }

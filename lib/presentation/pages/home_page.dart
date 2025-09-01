@@ -7,9 +7,9 @@ import 'package:project/presentation/bloc/get_project_items/get_project_items_bl
 import 'package:project_box/presentation/widgets/banner_images.dart';
 import 'package:project_box/presentation/widgets/next_task_section.dart';
 import 'package:project_box/presentation/widgets/recent_projects.dart';
-import 'package:project_box/presentation/widgets/stats_info_section.dart';
-import 'package:project_box/presentation/widgets/task_completion_chart.dart';
-import 'package:task/presentation/bloc/next_tasks/next_tasks_bloc.dart';
+  import 'package:project_box/presentation/widgets/stats_info_section.dart';
+  import 'package:project_box/presentation/widgets/task_completion_chart.dart';
+  import 'package:task/presentation/bloc/next_tasks/next_tasks_bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io';
@@ -28,6 +28,7 @@ class HomePageState extends State<HomePage> {
   final DatabaseHelper _db = di.locator<DatabaseHelper>();
 
   Future<void> _exportData() async {
+    final l10n = AppLocalizations.of(context)!;
     final projects = await _db.getProjects(null);
     final List<Map<String, dynamic>> data = [];
     for (final p in projects) {
@@ -37,7 +38,7 @@ class HomePageState extends State<HomePage> {
     final tempDir = Directory.systemTemp;
     final file = File('${tempDir.path}/project_box_export.json');
     await file.writeAsString(jsonEncode(data));
-    await Share.shareXFiles([XFile(file.path)], text: 'Project Box export');
+    await Share.shareXFiles([XFile(file.path)], text: l10n.projectBoxExport);
   }
 
   Future<void> _importData() async {
@@ -96,23 +97,23 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('Project Box'),
+          title: Text(l10n.appTitle),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.upload_file),
-            tooltip: 'Export',
-            onPressed: _exportData,
-          ),
-          IconButton(
-            icon: const Icon(Icons.download),
-            tooltip: 'Import',
-            onPressed: _importData,
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            tooltip: 'Settings',
-            onPressed: () => context.push('/settings'),
-          ),
+            IconButton(
+              icon: const Icon(Icons.upload_file),
+              tooltip: l10n.export,
+              onPressed: _exportData,
+            ),
+            IconButton(
+              icon: const Icon(Icons.download),
+              tooltip: l10n.import,
+              onPressed: _importData,
+            ),
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: l10n.settings,
+              onPressed: () => context.push('/settings'),
+            ),
         ],
       ),
       body: SafeArea(
