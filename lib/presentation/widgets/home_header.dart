@@ -1,3 +1,4 @@
+import 'package:core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 // Tidak perlu 'package:flutter/widgets.dart'; karena sudah termasuk di material.dart
 
@@ -6,19 +7,19 @@ class HomeHeader extends StatelessWidget {
 
   // Fungsi untuk mendapatkan sapaan dinamis kita pindahkan ke sini
   // agar widget ini mandiri.
-  String _getGreeting() {
+  String _getGreeting(AppLocalizations l10n) {
     final hour = DateTime.now().hour;
     if (hour < 11) {
-      return 'Selamat Pagi,';
+      return l10n.goodMorning;
     }
     if (hour < 15) {
-      return 'Selamat Siang,';
+      return l10n.goodAfternoon;
     }
     if (hour < 19) {
       // Waktu WIB saat ini adalah 16:54, jadi ini yang akan tampil
-      return 'Selamat Sore,';
+      return l10n.goodEvening;
     }
-    return 'Selamat Malam,';
+    return l10n.goodNight;
   }
 
   @override
@@ -26,18 +27,19 @@ class HomeHeader extends StatelessWidget {
     // Mengambil data tema dari context untuk konsistensi
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${_getGreeting()} Gira', // Menggunakan fungsi sapaan dinamis
+          '${_getGreeting(l10n)} Gira', // Menggunakan fungsi sapaan dinamis
           style: textTheme.titleMedium?.copyWith(
             color: colorScheme.onSurface.withOpacity(0.7), // Warna yang adaptif
           ),
         ),
         Text(
-          'Mari Berkarya!', // Anda bisa mengganti dengan nama pengguna
+          l10n.homeTagline, // Anda bisa mengganti dengan nama pengguna
           style: textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.bold,
             color: colorScheme

@@ -134,6 +134,54 @@ abstract class AppLocalizations {
   /// **'Next Task'**
   String get nextTask;
 
+  /// No description provided for @ad.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad'**
+  String get ad;
+
+  /// No description provided for @goodMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Morning,'**
+  String get goodMorning;
+
+  /// No description provided for @goodAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Afternoon,'**
+  String get goodAfternoon;
+
+  /// No description provided for @goodEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Evening,'**
+  String get goodEvening;
+
+  /// No description provided for @goodNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Night,'**
+  String get goodNight;
+
+  /// No description provided for @homeTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s Create!'**
+  String get homeTagline;
+
+  /// No description provided for @failedToLoadProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load projects: {error}'**
+  String failedToLoadProjects(String error);
+
+  /// No description provided for @fromProject.
+  ///
+  /// In en, this message translates to:
+  /// **'from: {projectName}'**
+  String fromProject(String projectName);
+
   /// No description provided for @task.
   ///
   /// In en, this message translates to:

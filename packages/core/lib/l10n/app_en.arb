@@ -6,6 +6,29 @@
     "seeAll" : "See All",
     "nextTask" : "Next Task",
 
+    "ad" : "Ad",
+    "goodMorning" : "Good Morning,",
+    "goodAfternoon" : "Good Afternoon,",
+    "goodEvening" : "Good Evening,",
+    "goodNight" : "Good Night,",
+    "homeTagline" : "Let's Create!",
+    "failedToLoadProjects" : "Failed to load projects: {error}",
+    "@failedToLoadProjects": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "fromProject" : "from: {projectName}",
+    "@fromProject": {
+        "placeholders": {
+            "projectName": {
+                "type": "String"
+            }
+        }
+    },
+
     "task" : "Task",
     "log" : "Log",
     "info" : "Info",
