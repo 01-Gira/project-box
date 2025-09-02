@@ -127,6 +127,9 @@ class DatabaseHelper {
     );
     final totalTasksDone = Sqflite.firstIntValue(totalTasksDoneResult) ?? 0;
 
+    final totalTasksResult = await db.rawQuery("SELECT COUNT(*) FROM tasks");
+    final totalTasks = Sqflite.firstIntValue(totalTasksResult) ?? 0;
+
     // Hitung jumlah tugas yang diselesaikan setiap hari untuk 7 hari terakhir
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -164,6 +167,7 @@ class DatabaseHelper {
       'totalTasksDone': totalTasksDone,
       'productiveStreak': productiveStreak,
       'dailyTaskCompletions': dailyTaskCompletions,
+      'totalTasks': totalTasks,
     };
   }
 

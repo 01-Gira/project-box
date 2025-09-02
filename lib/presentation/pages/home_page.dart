@@ -12,6 +12,9 @@ import 'package:project_box/presentation/widgets/task_completion_chart.dart';
 import 'package:project_box/presentation/widgets/calendar_widget.dart';
 import 'package:task/presentation/bloc/next_tasks/next_tasks_bloc.dart';
 import 'package:task/presentation/bloc/search_tasks/search_tasks_bloc.dart';
+import 'package:project_box/presentation/widgets/burn_down_chart.dart';
+import 'package:project_box/presentation/widgets/velocity_chart.dart';
+import 'package:task/presentation/bloc/next_tasks/next_tasks_bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io';
@@ -130,6 +133,9 @@ class HomePageState extends State<HomePage> {
             const TaskCompletionChart(),
             const SizedBox(height: 16),
             const CalendarWidget(),
+            const BurnDownChart(),
+            const SizedBox(height: 16),
+            const VelocityChart(),
             const SizedBox(height: 16),
             NextTaskSection(),
             const SizedBox(height: 16),
