@@ -7,9 +7,11 @@ import 'package:project/presentation/bloc/get_project_items/get_project_items_bl
 import 'package:project_box/presentation/widgets/banner_images.dart';
 import 'package:project_box/presentation/widgets/next_task_section.dart';
 import 'package:project_box/presentation/widgets/recent_projects.dart';
-  import 'package:project_box/presentation/widgets/stats_info_section.dart';
-  import 'package:project_box/presentation/widgets/task_completion_chart.dart';
-  import 'package:task/presentation/bloc/next_tasks/next_tasks_bloc.dart';
+import 'package:project_box/presentation/widgets/stats_info_section.dart';
+import 'package:project_box/presentation/widgets/task_completion_chart.dart';
+import 'package:project_box/presentation/widgets/calendar_widget.dart';
+import 'package:task/presentation/bloc/next_tasks/next_tasks_bloc.dart';
+import 'package:task/presentation/bloc/search_tasks/search_tasks_bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io';
@@ -84,6 +86,7 @@ class HomePageState extends State<HomePage> {
         context.read<GetProjectItemsBloc>().add(FetchProjectItems(limit: 5));
         context.read<NextTasksBloc>().add(FetchNextTasks());
         context.read<DashboardStatsBloc>().add(FetchDashboardStats());
+        context.read<SearchTasksBloc>().add(const SearchTasksRequested());
       }
     });
   }
@@ -97,23 +100,23 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-          title: Text(l10n.appTitle),
+        title: Text(l10n.appTitle),
         actions: [
-            IconButton(
-              icon: const Icon(Icons.upload_file),
-              tooltip: l10n.export,
-              onPressed: _exportData,
-            ),
-            IconButton(
-              icon: const Icon(Icons.download),
-              tooltip: l10n.import,
-              onPressed: _importData,
-            ),
-            IconButton(
-              icon: const Icon(Icons.settings),
-              tooltip: l10n.settings,
-              onPressed: () => context.push('/settings'),
-            ),
+          IconButton(
+            icon: const Icon(Icons.upload_file),
+            tooltip: l10n.export,
+            onPressed: _exportData,
+          ),
+          IconButton(
+            icon: const Icon(Icons.download),
+            tooltip: l10n.import,
+            onPressed: _importData,
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: l10n.settings,
+            onPressed: () => context.push('/settings'),
+          ),
         ],
       ),
       body: SafeArea(
@@ -125,6 +128,8 @@ class HomePageState extends State<HomePage> {
             const StatsInfoSection(),
             const SizedBox(height: 16),
             const TaskCompletionChart(),
+            const SizedBox(height: 16),
+            const CalendarWidget(),
             const SizedBox(height: 16),
             NextTaskSection(),
             const SizedBox(height: 16),

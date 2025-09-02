@@ -46,6 +46,8 @@ class CreateTaskBloc extends Bloc<CreateTaskEvent, CreateTaskState> {
         priority: event.priority,
         description: event.description,
         parentTaskId: event.parentTaskId,
+        recurrenceRule: event.recurrenceRule,
+        recurrenceEndDate: event.recurrenceEndDate,
       );
 
       final result = await _saveTask(projectId: event.projectId, task: newTask);
