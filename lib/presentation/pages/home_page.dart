@@ -9,6 +9,9 @@ import 'package:project_box/presentation/widgets/next_task_section.dart';
 import 'package:project_box/presentation/widgets/recent_projects.dart';
 import 'package:project_box/presentation/widgets/stats_info_section.dart';
 import 'package:project_box/presentation/widgets/task_completion_chart.dart';
+import 'package:project_box/presentation/widgets/calendar_widget.dart';
+import 'package:task/presentation/bloc/next_tasks/next_tasks_bloc.dart';
+import 'package:task/presentation/bloc/search_tasks/search_tasks_bloc.dart';
 import 'package:project_box/presentation/widgets/burn_down_chart.dart';
 import 'package:project_box/presentation/widgets/velocity_chart.dart';
 import 'package:task/presentation/bloc/next_tasks/next_tasks_bloc.dart';
@@ -86,6 +89,7 @@ class HomePageState extends State<HomePage> {
         context.read<GetProjectItemsBloc>().add(FetchProjectItems(limit: 5));
         context.read<NextTasksBloc>().add(FetchNextTasks());
         context.read<DashboardStatsBloc>().add(FetchDashboardStats());
+        context.read<SearchTasksBloc>().add(const SearchTasksRequested());
       }
     });
   }
@@ -128,6 +132,7 @@ class HomePageState extends State<HomePage> {
             const SizedBox(height: 16),
             const TaskCompletionChart(),
             const SizedBox(height: 16),
+            const CalendarWidget(),
             const BurnDownChart(),
             const SizedBox(height: 16),
             const VelocityChart(),

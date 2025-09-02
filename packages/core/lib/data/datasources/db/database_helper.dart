@@ -30,7 +30,7 @@ class DatabaseHelper {
 
     var db = await openDatabase(
       databasePath,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -63,6 +63,8 @@ class DatabaseHelper {
         due_date INTEGER,
         priority INTEGER,
         description TEXT,
+        recurrence_rule TEXT,
+        recurrence_end_date INTEGER,
         FOREIGN KEY (project_id) REFERENCES $_tblProjects (id) ON DELETE CASCADE,
         FOREIGN KEY (parent_task_id) REFERENCES $_tblTasks (id) ON DELETE CASCADE
       );
@@ -355,6 +357,8 @@ class DatabaseHelper {
         T.priority,
         T.description,
         T.parent_task_id,
+        T.recurrence_rule,
+        T.recurrence_end_date,
         T.project_id,
         P.name as project_name
       FROM tasks T

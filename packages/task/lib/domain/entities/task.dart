@@ -9,6 +9,8 @@ class Task extends Equatable {
   final int priority;
   final String? description;
   final int? parentTaskId;
+  final String? recurrenceRule;
+  final int? recurrenceEndDate;
 
   const Task({
     required this.id,
@@ -19,6 +21,8 @@ class Task extends Equatable {
     this.priority = 0,
     this.description,
     this.parentTaskId,
+    this.recurrenceRule,
+    this.recurrenceEndDate,
   });
 
   @override
@@ -31,5 +35,7 @@ class Task extends Equatable {
     priority,
     description,
     parentTaskId,
+    recurrenceRule,
+    recurrenceEndDate,
   ];
 }

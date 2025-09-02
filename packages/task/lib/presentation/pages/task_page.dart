@@ -9,6 +9,7 @@ import 'package:task/presentation/bloc/remove_task/remove_task_bloc.dart';
 import 'package:task/presentation/bloc/update_task/update_task_bloc.dart';
 import 'package:task/presentation/bloc/update_task_status/update_task_status_bloc.dart';
 import 'package:task/presentation/bloc/update_tasks_order/update_tasks_order_bloc.dart';
+import 'package:task/presentation/bloc/search_tasks/search_tasks_bloc.dart';
 import 'package:task/presentation/widgets/task_card.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
@@ -98,6 +99,7 @@ class _TaskPageState extends State<TaskPage> {
           setState(() {
             _localTasks.removeAt(index);
           });
+          context.read<SearchTasksBloc>().add(const SearchTasksRequested());
         }
       },
       child: Row(
@@ -182,6 +184,10 @@ class _TaskPageState extends State<TaskPage> {
         ? DateTime.fromMillisecondsSinceEpoch(task.dueDate!)
         : null;
     int priority = task.priority;
+    String? recurrenceRule = task.recurrenceRule;
+    DateTime? recurrenceEndDate = task.recurrenceEndDate != null
+        ? DateTime.fromMillisecondsSinceEpoch(task.recurrenceEndDate!)
+        : null;
 
     final result = await showModalBottomSheet<Map<String, dynamic>>(
       context: context,
@@ -208,8 +214,9 @@ class _TaskPageState extends State<TaskPage> {
                 const SizedBox(height: 8),
                 TextField(
                   controller: descriptionController,
-                  decoration:
-                      InputDecoration(labelText: l10n.projectDescriptionLabel),
+                  decoration: InputDecoration(
+                    labelText: l10n.projectDescriptionLabel,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<int>(
@@ -221,6 +228,18 @@ class _TaskPageState extends State<TaskPage> {
                         DropdownMenuItem(value: index, child: Text('$index')),
                   ),
                   onChanged: (value) => setState(() => priority = value ?? 0),
+                ),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<String?>(
+                  value: recurrenceRule,
+                  decoration: const InputDecoration(labelText: 'Recurrence'),
+                  items: const [
+                    DropdownMenuItem(value: null, child: Text('None')),
+                    DropdownMenuItem(value: 'daily', child: Text('Daily')),
+                    DropdownMenuItem(value: 'weekly', child: Text('Weekly')),
+                    DropdownMenuItem(value: 'monthly', child: Text('Monthly')),
+                  ],
+                  onChanged: (value) => setState(() => recurrenceRule = value),
                 ),
                 const SizedBox(height: 8),
                 Row(
@@ -248,6 +267,35 @@ class _TaskPageState extends State<TaskPage> {
                     ),
                   ],
                 ),
+                if (recurrenceRule != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            recurrenceEndDate != null
+                                ? DateFormat.yMd().format(recurrenceEndDate!)
+                                : 'End Date',
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final picked = await showDatePicker(
+                              context: context,
+                              initialDate: recurrenceEndDate ?? DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (picked != null) {
+                              setState(() => recurrenceEndDate = picked);
+                            }
+                          },
+                          child: const Icon(Icons.calendar_today),
+                        ),
+                      ],
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop({
@@ -255,6 +303,9 @@ class _TaskPageState extends State<TaskPage> {
                     'description': descriptionController.text.trim(),
                     'priority': priority,
                     'dueDate': dueDate?.millisecondsSinceEpoch,
+                    'recurrenceRule': recurrenceRule,
+                    'recurrenceEndDate':
+                        recurrenceEndDate?.millisecondsSinceEpoch,
                   }),
                   child: Text(l10n.save),
                 ),
@@ -278,12 +329,15 @@ class _TaskPageState extends State<TaskPage> {
         priority: result['priority'] as int,
         dueDate: result['dueDate'] as int?,
         parentTaskId: task.parentTaskId,
+        recurrenceRule: result['recurrenceRule'] as String?,
+        recurrenceEndDate: result['recurrenceEndDate'] as int?,
       );
 
       if (mounted) {
         context.read<UpdateTaskBloc>().add(
           UpdateTaskRequested(task: updatedTask),
         );
+        context.read<SearchTasksBloc>().add(const SearchTasksRequested());
       }
     }
   }

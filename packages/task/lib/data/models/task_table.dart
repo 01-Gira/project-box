@@ -10,6 +10,8 @@ class TaskTable extends Equatable {
   final int priority;
   final String? description;
   final int? parentTaskId;
+  final String? recurrenceRule;
+  final int? recurrenceEndDate;
 
   const TaskTable({
     required this.id,
@@ -20,6 +22,8 @@ class TaskTable extends Equatable {
     this.priority = 0,
     this.description,
     this.parentTaskId,
+    this.recurrenceRule,
+    this.recurrenceEndDate,
   });
 
   factory TaskTable.fromMap(Map<String, dynamic> map) => TaskTable(
@@ -31,6 +35,8 @@ class TaskTable extends Equatable {
     priority: map['priority'] ?? 0,
     description: map['description'],
     parentTaskId: map['parent_task_id'],
+    recurrenceRule: map['recurrence_rule'],
+    recurrenceEndDate: map['recurrence_end_date'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -41,6 +47,8 @@ class TaskTable extends Equatable {
     'priority': priority,
     'description': description,
     'parent_task_id': parentTaskId,
+    'recurrence_rule': recurrenceRule,
+    'recurrence_end_date': recurrenceEndDate,
   };
 
   factory TaskTable.fromEntity(Task task) => TaskTable(
@@ -52,6 +60,8 @@ class TaskTable extends Equatable {
     priority: task.priority,
     description: task.description,
     parentTaskId: task.parentTaskId,
+    recurrenceRule: task.recurrenceRule,
+    recurrenceEndDate: task.recurrenceEndDate,
   );
 
   Task toEntity() => Task(
@@ -63,6 +73,8 @@ class TaskTable extends Equatable {
     priority: priority,
     description: description,
     parentTaskId: parentTaskId,
+    recurrenceRule: recurrenceRule,
+    recurrenceEndDate: recurrenceEndDate,
   );
 
   @override
@@ -75,5 +87,7 @@ class TaskTable extends Equatable {
     priority,
     description,
     parentTaskId,
+    recurrenceRule,
+    recurrenceEndDate,
   ];
 }

@@ -14,6 +14,8 @@ class TaskSubmitted extends CreateTaskEvent {
   final int? dueDate;
   final int priority;
   final int? parentTaskId;
+  final String? recurrenceRule;
+  final int? recurrenceEndDate;
 
   const TaskSubmitted({
     required this.projectId,
@@ -22,5 +24,7 @@ class TaskSubmitted extends CreateTaskEvent {
     this.dueDate,
     this.priority = 0,
     this.parentTaskId,
+    this.recurrenceRule,
+    this.recurrenceEndDate,
   });
 }
