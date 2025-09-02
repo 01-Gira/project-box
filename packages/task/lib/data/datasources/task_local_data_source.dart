@@ -172,6 +172,8 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
         T.priority,
         T.description,
         T.parent_task_id,
+        T.recurrence_rule,
+        T.recurrence_end_date,
         T.project_id,
         P.name as project_name
       FROM tasks T

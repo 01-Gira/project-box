@@ -12,6 +12,7 @@ import 'package:project/domain/enitites/project.dart';
 import 'package:project/presentation/bloc/get_project_by_id/get_project_by_id_bloc.dart';
 import 'package:project/presentation/bloc/remove_project_by_id/remove_project_by_id_bloc.dart';
 import 'package:task/presentation/bloc/create_task/create_task_bloc.dart';
+import 'package:task/presentation/bloc/search_tasks/search_tasks_bloc.dart';
 
 import 'package:task/presentation/pages/task_page.dart';
 import 'package:progress_log/presentation/pages/progress_log_page.dart';
@@ -36,6 +37,8 @@ class _DetailProjectPageState extends State<DetailProjectPage>
   File? _logImageFile;
   DateTime? _taskDueDate;
   int _taskPriority = 0;
+  String? _taskRecurrenceRule;
+  DateTime? _taskRecurrenceEndDate;
 
   @override
   void initState() {
@@ -73,12 +76,17 @@ class _DetailProjectPageState extends State<DetailProjectPage>
           description: description.isEmpty ? null : description,
           dueDate: _taskDueDate?.millisecondsSinceEpoch,
           priority: _taskPriority,
+          recurrenceRule: _taskRecurrenceRule,
+          recurrenceEndDate: _taskRecurrenceEndDate?.millisecondsSinceEpoch,
         ),
       );
       _taskTitleController.clear();
       _taskDescriptionController.clear();
       _taskDueDate = null;
       _taskPriority = 0;
+      _taskRecurrenceRule = null;
+      _taskRecurrenceEndDate = null;
+      context.read<SearchTasksBloc>().add(const SearchTasksRequested());
       Navigator.pop(context);
     }
   }
@@ -252,8 +260,9 @@ class _DetailProjectPageState extends State<DetailProjectPage>
                 const SizedBox(height: 8),
                 TextField(
                   controller: _taskDescriptionController,
-                  decoration:
-                      InputDecoration(labelText: l10n.projectDescriptionLabel),
+                  decoration: InputDecoration(
+                    labelText: l10n.projectDescriptionLabel,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<int>(
@@ -266,6 +275,19 @@ class _DetailProjectPageState extends State<DetailProjectPage>
                   ),
                   onChanged: (value) =>
                       setState(() => _taskPriority = value ?? 0),
+                ),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<String?>(
+                  value: _taskRecurrenceRule,
+                  decoration: const InputDecoration(labelText: 'Recurrence'),
+                  items: const [
+                    DropdownMenuItem(value: null, child: Text('None')),
+                    DropdownMenuItem(value: 'daily', child: Text('Daily')),
+                    DropdownMenuItem(value: 'weekly', child: Text('Weekly')),
+                    DropdownMenuItem(value: 'monthly', child: Text('Monthly')),
+                  ],
+                  onChanged: (value) =>
+                      setState(() => _taskRecurrenceRule = value),
                 ),
                 const SizedBox(height: 8),
                 Row(
@@ -293,6 +315,38 @@ class _DetailProjectPageState extends State<DetailProjectPage>
                     ),
                   ],
                 ),
+                if (_taskRecurrenceRule != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            _taskRecurrenceEndDate != null
+                                ? DateFormat.yMd().format(
+                                    _taskRecurrenceEndDate!,
+                                  )
+                                : 'End Date',
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final picked = await showDatePicker(
+                              context: context,
+                              initialDate:
+                                  _taskRecurrenceEndDate ?? DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (picked != null) {
+                              setState(() => _taskRecurrenceEndDate = picked);
+                            }
+                          },
+                          child: const Icon(Icons.calendar_today),
+                        ),
+                      ],
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 ElevatedButton(onPressed: _saveTask, child: Text(l10n.save)),
               ],
@@ -492,11 +546,11 @@ class _InfoView extends StatelessWidget {
         const SizedBox(height: 8),
         Text(project.description, style: theme.textTheme.bodyMedium),
         const Divider(height: 40),
-          _InfoTile(
-            icon: Icons.label_outline,
-            title: l10n.projectStatusLabel,
-            subtitle: project.status,
-          ),
+        _InfoTile(
+          icon: Icons.label_outline,
+          title: l10n.projectStatusLabel,
+          subtitle: project.status,
+        ),
         _InfoTile(
           icon: Icons.calendar_today_outlined,
           title: l10n.createdDate,

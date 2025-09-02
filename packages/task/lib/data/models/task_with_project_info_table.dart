@@ -11,6 +11,8 @@ class TaskWithProjectInfoTable extends Equatable {
   final int priority;
   final String? description;
   final int? parentTaskId;
+  final String? recurrenceRule;
+  final int? recurrenceEndDate;
   final int projectId;
   final String projectName;
 
@@ -23,6 +25,8 @@ class TaskWithProjectInfoTable extends Equatable {
     this.priority = 0,
     this.description,
     this.parentTaskId,
+    this.recurrenceRule,
+    this.recurrenceEndDate,
     required this.projectId,
     required this.projectName,
   });
@@ -37,6 +41,8 @@ class TaskWithProjectInfoTable extends Equatable {
       priority: map['priority'] ?? 0,
       description: map['description'],
       parentTaskId: map['parent_task_id'],
+      recurrenceRule: map['recurrence_rule'],
+      recurrenceEndDate: map['recurrence_end_date'],
       projectId: map['project_id'],
       projectName: map['project_name'],
     );
@@ -54,6 +60,8 @@ class TaskWithProjectInfoTable extends Equatable {
         priority: priority,
         description: description,
         parentTaskId: parentTaskId,
+        recurrenceRule: recurrenceRule,
+        recurrenceEndDate: recurrenceEndDate,
       ),
       projectName: projectName,
     );
@@ -69,6 +77,8 @@ class TaskWithProjectInfoTable extends Equatable {
     priority,
     description,
     parentTaskId,
+    recurrenceRule,
+    recurrenceEndDate,
     projectId,
     projectName,
   ];
