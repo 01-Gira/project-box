@@ -22,6 +22,7 @@ class DatabaseHelper {
   static const String _tblTasks = 'tasks';
   static const String _tblMaterials = 'materials';
   static const String _tblProgressLogs = 'progress_logs';
+  static const String _tblTaskCompletionLogs = 'task_completion_logs';
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
@@ -29,7 +30,7 @@ class DatabaseHelper {
 
     var db = await openDatabase(
       databasePath,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -59,6 +60,9 @@ class DatabaseHelper {
         title TEXT NOT NULL,
         is_completed INTEGER NOT NULL DEFAULT 0,
         order_sequence INTEGER,
+        due_date INTEGER,
+        priority INTEGER,
+        description TEXT,
         FOREIGN KEY (project_id) REFERENCES $_tblProjects (id) ON DELETE CASCADE,
         FOREIGN KEY (parent_task_id) REFERENCES $_tblTasks (id) ON DELETE CASCADE
       );
@@ -88,12 +92,26 @@ class DatabaseHelper {
         FOREIGN KEY (project_id) REFERENCES $_tblProjects (id) ON DELETE CASCADE
       );
     ''');
+
+    await db.execute('''
+      CREATE TABLE $_tblTaskCompletionLogs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        task_id INTEGER NOT NULL,
+        completion_date INTEGER NOT NULL,
+        FOREIGN KEY (task_id) REFERENCES $_tblTasks (id) ON DELETE CASCADE
+      );
+    ''');
   }
 
-  Future<Map<String, int>> getDashboardStats() async {
+  Future<Map<String, dynamic>> getDashboardStats() async {
     final db = await database;
     if (db == null) {
-      return {'completedProjects': 0, 'totalTasksDone': 0};
+      return {
+        'completedProjects': 0,
+        'totalTasksDone': 0,
+        'productiveStreak': 0,
+        'dailyTaskCompletions': List<int>.filled(7, 0),
+      };
     }
 
     final completedProjectsResult = await db.rawQuery(
@@ -106,10 +124,48 @@ class DatabaseHelper {
       "SELECT COUNT(*) FROM tasks WHERE is_completed = 1",
     );
     final totalTasksDone = Sqflite.firstIntValue(totalTasksDoneResult) ?? 0;
+
+    final totalTasksResult = await db.rawQuery("SELECT COUNT(*) FROM tasks");
+    final totalTasks = Sqflite.firstIntValue(totalTasksResult) ?? 0;
+
+    // Hitung jumlah tugas yang diselesaikan setiap hari untuk 7 hari terakhir
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final dailyTaskCompletions = <int>[];
+    for (int i = 6; i >= 0; i--) {
+      final day = today.subtract(Duration(days: i));
+      final nextDay = day.add(const Duration(days: 1));
+      final result = await db.rawQuery(
+        'SELECT COUNT(*) FROM $_tblTaskCompletionLogs WHERE completion_date >= ? AND completion_date < ?',
+        [day.millisecondsSinceEpoch, nextDay.millisecondsSinceEpoch],
+      );
+      dailyTaskCompletions.add(Sqflite.firstIntValue(result) ?? 0);
+    }
+
+    // Hitung productive streak (jumlah hari berturut-turut dengan penyelesaian tugas)
+    int productiveStreak = 0;
+    var streakDay = today;
+    while (true) {
+      final nextDay = streakDay.add(const Duration(days: 1));
+      final result = await db.rawQuery(
+        'SELECT COUNT(*) FROM $_tblTaskCompletionLogs WHERE completion_date >= ? AND completion_date < ?',
+        [streakDay.millisecondsSinceEpoch, nextDay.millisecondsSinceEpoch],
+      );
+      final count = Sqflite.firstIntValue(result) ?? 0;
+      if (count > 0) {
+        productiveStreak++;
+        streakDay = streakDay.subtract(const Duration(days: 1));
+      } else {
+        break;
+      }
+    }
+
     return {
       'completedProjects': completedProjects,
       'totalTasksDone': totalTasksDone,
-      'productiveStreak': 0,
+      'productiveStreak': productiveStreak,
+      'dailyTaskCompletions': dailyTaskCompletions,
+      'totalTasks': totalTasks,
     };
   }
 
@@ -124,6 +180,7 @@ class DatabaseHelper {
       await db.execute('DROP TABLE IF EXISTS $_tblMaterials');
       await db.execute('DROP TABLE IF EXISTS $_tblTasks');
       await db.execute('DROP TABLE IF EXISTS $_tblProjects');
+      await db.execute('DROP TABLE IF EXISTS $_tblTaskCompletionLogs');
       _onCreate(db, newVersion);
     }
   }
@@ -294,12 +351,16 @@ class DatabaseHelper {
         T.title,
         T.is_completed,
         T.order_sequence,
+        T.due_date,
+        T.priority,
+        T.description,
+        T.parent_task_id,
         T.project_id,
-        P.name as project_name 
+        P.name as project_name
       FROM tasks T
       INNER JOIN projects P ON T.project_id = P.id
       WHERE T.is_completed = 0 AND P.status = 'Active'
-      ORDER BY T.order_sequence ASC, P.creation_date DESC
+      ORDER BY T.priority DESC, T.due_date ASC, T.order_sequence ASC, P.creation_date DESC
       LIMIT ?
     ''',
       [limit],
@@ -314,18 +375,13 @@ class DatabaseHelper {
       _tblTasks,
       where: 'project_id = ?',
       whereArgs: [projectId],
-      orderBy: 'order_sequence ASC',
+      orderBy: 'parent_task_id ASC, order_sequence ASC',
     );
   }
 
-  Future<int> updateTask(int id, String title) async {
+  Future<int> updateTask(int id, Map<String, dynamic> task) async {
     final db = await database;
-    return await db!.update(
-      _tblTasks,
-      {'title': title}, // Ini harus Map
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db!.update(_tblTasks, task, where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> deleteTask(int id) async {
@@ -359,17 +415,34 @@ class DatabaseHelper {
   Future<void> updateTaskStatus(int taskId, bool isCompleted) async {
     final db = await database;
     if (db == null) return;
-
-    await db.update(
-      _tblTasks, // Nama tabel tugas Anda
-      {
-        'is_completed': isCompleted
-            ? 1
-            : 0, // Ubah boolean menjadi integer (1 atau 0)
-      },
+    final existing = await db.query(
+      _tblTasks,
+      columns: ['is_completed'],
       where: 'id = ?',
       whereArgs: [taskId],
     );
+    final wasCompleted =
+        existing.isNotEmpty && (existing.first['is_completed'] as int) == 1;
+
+    await db.update(
+      _tblTasks, // Nama tabel tugas Anda
+      {'is_completed': isCompleted ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [taskId],
+    );
+
+    if (isCompleted && !wasCompleted) {
+      await db.insert(_tblTaskCompletionLogs, {
+        'task_id': taskId,
+        'completion_date': DateTime.now().millisecondsSinceEpoch,
+      });
+    } else if (!isCompleted && wasCompleted) {
+      await db.delete(
+        _tblTaskCompletionLogs,
+        where: 'task_id = ?',
+        whereArgs: [taskId],
+      );
+    }
   }
 
   // --- Metode CRUD (Create, Read, Update, Delete) untuk Materials ---

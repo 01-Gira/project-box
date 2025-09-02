@@ -10,7 +10,7 @@ abstract class ProjectLocalDataSource {
   Future<List<ProjectTable>> getProjects(int? limit);
   Future<ProjectTable> getProjectById(int id);
   Future<List<ProjectWithProgressTable>> getProjectsWithProgress(int? limit);
-  Future<Map<String, int>> getDashboardStats();
+  Future<Map<String, dynamic>> getDashboardStats();
   Future<String> updateProjectsStatus(List<int> ids, String newStatus);
   Future<String> removeProjects(List<int> ids);
 }
@@ -90,7 +90,7 @@ class ProjectLocalDataSourceImpl implements ProjectLocalDataSource {
   }
 
   @override
-  Future<Map<String, int>> getDashboardStats() async {
+  Future<Map<String, dynamic>> getDashboardStats() async {
     try {
       return await helper.getDashboardStats();
     } catch (e) {

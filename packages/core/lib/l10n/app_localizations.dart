@@ -6,6 +6,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
 import 'app_localizations_id.dart';
 
 // ignore_for_file: type=lint
@@ -96,6 +98,8 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('id'),
+    Locale('es'),
+    Locale('fr'),
   ];
 
   /// No description provided for @finishedProjects.
@@ -133,6 +137,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next Task'**
   String get nextTask;
+
+  /// No description provided for @ad.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad'**
+  String get ad;
+
+  /// No description provided for @goodMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Morning,'**
+  String get goodMorning;
+
+  /// No description provided for @goodAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Afternoon,'**
+  String get goodAfternoon;
+
+  /// No description provided for @goodEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Evening,'**
+  String get goodEvening;
+
+  /// No description provided for @goodNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Night,'**
+  String get goodNight;
+
+  /// No description provided for @homeTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s Create!'**
+  String get homeTagline;
+
+  /// No description provided for @failedToLoadProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load projects: {error}'**
+  String failedToLoadProjects(String error);
+
+  /// No description provided for @fromProject.
+  ///
+  /// In en, this message translates to:
+  /// **'from: {projectName}'**
+  String fromProject(String projectName);
 
   /// No description provided for @task.
   ///
@@ -415,6 +467,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change Status'**
   String get changeStatus;
+
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Box'**
+  String get appTitle;
+
+  /// No description provided for @projectBoxExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Box export'**
+  String get projectBoxExport;
+
+  /// No description provided for @export.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get export;
+
+  /// No description provided for @import.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get import;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @system.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get system;
+
+  /// No description provided for @light.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get light;
+
+  /// No description provided for @dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get dark;
+
+  /// No description provided for @noData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data'**
+  String get noData;
+
+  /// No description provided for @manual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get manual;
+
+  /// No description provided for @dueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Date'**
+  String get dueDate;
+
+  /// No description provided for @priority.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get priority;
+
+  /// No description provided for @priorityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'P: {priority}'**
+  String priorityLabel(String priority);
 }
 
 class _AppLocalizationsDelegate
@@ -428,7 +558,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'id'].contains(locale.languageCode);
+      <String>['en', 'es', 'fr', 'id'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -439,6 +569,10 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
     case 'id':
       return AppLocalizationsId();
   }

@@ -69,7 +69,9 @@ class RecentProjectsSection extends StatelessWidget {
                 case RequestState.error:
                   return Center(
                     child: Text(
-                      'Gagal memuat proyek: ${state.message}',
+                      AppLocalizations.of(
+                        context,
+                      )!.failedToLoadProjects(state.message ?? ''),
                       style: const TextStyle(color: Colors.red),
                     ),
                   );

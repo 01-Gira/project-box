@@ -11,13 +11,15 @@ abstract class TaskRepository {
   Future<Either<Failure, String>> removeTaskById(int id);
   Future<Either<Failure, List<entity.Task>>> getTasksForProject(int id);
   Future<Either<Failure, String>> updateTasksOrder(List<entity.Task> tasks);
-  Future<Either<Failure, String>> updateTaskById({
-    required int id,
-    required String title,
-  });
+  Future<Either<Failure, String>> updateTask(entity.Task task);
   Future<Either<Failure, String>> updateTaskStatusById({
     required int id,
     required bool isCompleted,
   });
   Future<Either<Failure, List<TaskWithProjectInfo>>> getNextTasks();
+  Future<Either<Failure, List<TaskWithProjectInfo>>> searchTasks({
+    String? query,
+    DateTime? dueDate,
+    bool? isCompleted,
+  });
 }

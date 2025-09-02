@@ -6,6 +6,29 @@
     "seeAll" : "Lihat Semua",
     "nextTask" : "Tugas Berikutnya",
 
+    "ad" : "Iklan",
+    "goodMorning" : "Selamat Pagi,",
+    "goodAfternoon" : "Selamat Siang,",
+    "goodEvening" : "Selamat Sore,",
+    "goodNight" : "Selamat Malam,",
+    "homeTagline" : "Mari Berkarya!",
+    "failedToLoadProjects" : "Gagal memuat proyek: {error}",
+    "@failedToLoadProjects": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "fromProject" : "dari: {projectName}",
+    "@fromProject": {
+        "placeholders": {
+            "projectName": {
+                "type": "String"
+            }
+        }
+    },
+
     "task" : "Tugas",
     "log" : "Log",
     "info" : "Info",
@@ -68,5 +91,26 @@
 
     "confirmDelete" : "Konfirmasi Hapus",
     "confirmationDelete" : "Apakah anda yakin ingin menghapus ini?",
-    "changeStatus" : "Ubah Status"
+    "changeStatus" : "Ubah Status",
+
+    "appTitle": "Project Box",
+    "projectBoxExport": "Ekspor Project Box",
+    "export": "Ekspor",
+    "import": "Impor",
+    "settings": "Pengaturan",
+    "system": "Sistem",
+    "light": "Terang",
+    "dark": "Gelap",
+    "noData": "Tidak ada data",
+    "manual": "Manual",
+    "dueDate": "Tanggal Jatuh Tempo",
+    "priority": "Prioritas",
+    "priorityLabel": "P: {priority}",
+    "@priorityLabel": {
+        "placeholders": {
+            "priority": {
+                "type": "String"
+            }
+        }
+    }
 }

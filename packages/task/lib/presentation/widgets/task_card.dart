@@ -1,5 +1,7 @@
+import 'package:core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:task/domain/entities/task.dart';
+import 'package:intl/intl.dart';
 
 class TaskCard extends StatelessWidget {
   final Task task;
@@ -33,6 +35,28 @@ class TaskCard extends StatelessWidget {
                 : TextDecoration.none,
             color: task.isCompleted == 1 ? Colors.grey : null,
           ),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (task.description != null && task.description!.isNotEmpty)
+              Text(task.description!),
+            Row(
+              children: [
+                if (task.dueDate != null)
+                  Text(
+                    DateFormat.yMd().format(
+                      DateTime.fromMillisecondsSinceEpoch(task.dueDate!),
+                    ),
+                  ),
+                const SizedBox(width: 8),
+                  Text(
+                    AppLocalizations.of(context)!
+                        .priorityLabel(task.priority.toString()),
+                  ),
+              ],
+            ),
+          ],
         ),
       ),
     );

@@ -51,6 +51,10 @@ import 'package:task/presentation/bloc/remove_task/remove_task_bloc.dart';
 import 'package:task/presentation/bloc/update_task/update_task_bloc.dart';
 import 'package:task/presentation/bloc/update_task_status/update_task_status_bloc.dart';
 import 'package:task/presentation/bloc/update_tasks_order/update_tasks_order_bloc.dart';
+import 'package:task/domain/usecases/search_tasks.dart';
+import 'package:task/presentation/bloc/search_tasks/search_tasks_bloc.dart';
+import 'package:core/notification_service.dart';
+import 'package:core/analytics/analytics_service.dart';
 
 final locator = GetIt.instance;
 
@@ -75,6 +79,7 @@ Future<void> init() async {
   locator.registerLazySingleton(() => UpdateTask(locator()));
   locator.registerLazySingleton(() => UpdateTaskStatus(locator()));
   locator.registerLazySingleton(() => GetNextTasks(locator()));
+  locator.registerLazySingleton(() => SearchTasks(locator()));
 
   // Log
   locator.registerLazySingleton(() => GetProgressLog(locator()));
@@ -120,6 +125,7 @@ Future<void> init() async {
   locator.registerFactory(() => RemoveTaskBloc(locator()));
   locator.registerFactory(() => UpdateTaskBloc(locator()));
   locator.registerFactory(() => UpdateTaskStatusBloc(locator()));
+  locator.registerFactory(() => SearchTasksBloc(searchTasks: locator()));
 
   locator.registerFactory(
     () => GetTasksForProjectBloc(
@@ -162,7 +168,10 @@ Future<void> init() async {
   // Repository
   // Project
   locator.registerLazySingleton<ProjectRepository>(
-    () => ProjectRepositoryImpl(localDataSource: locator()),
+    () => ProjectRepositoryImpl(
+      localDataSource: locator(),
+      analyticsService: locator(),
+    ),
   );
   // task
   locator.registerLazySingleton<TaskRepository>(
@@ -180,7 +189,10 @@ Future<void> init() async {
   );
   // task
   locator.registerLazySingleton<TaskLocalDataSource>(
-    () => TaskLocalDataSourceImpl(helper: locator()),
+    () => TaskLocalDataSourceImpl(
+      helper: locator(),
+      notificationService: locator(),
+    ),
   );
   // Log
   locator.registerLazySingleton<ProgressLogLocalDataSource>(
@@ -189,4 +201,10 @@ Future<void> init() async {
 
   // helper
   locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
+  locator.registerLazySingleton<NotificationService>(
+    () => NotificationService(),
+  );
+  locator.registerLazySingleton<AnalyticsService>(
+    () => const AnalyticsService(),
+  );
 }

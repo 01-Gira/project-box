@@ -34,12 +34,11 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
-  Future<Either<Failure, String>> updateTaskById({
-    required int id,
-    required String title,
-  }) async {
+  Future<Either<Failure, String>> updateTask(entity.Task task) async {
     try {
-      final result = await localDataSource.updateTaskById(id: id, title: title);
+      final result = await localDataSource.updateTask(
+        TaskTable.fromEntity(task),
+      );
       return Right(result);
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(e.message));
@@ -102,6 +101,24 @@ class TaskRepositoryImpl implements TaskRepository {
       return Right(result.map((model) => model.toEntity()).toList());
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TaskWithProjectInfo>>> searchTasks({
+    String? query,
+    DateTime? dueDate,
+    bool? isCompleted,
+  }) async {
+    try {
+      final result = await localDataSource.searchTasks(
+        query: query,
+        dueDate: dueDate?.millisecondsSinceEpoch,
+        isCompleted: isCompleted,
+      );
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
     }
   }
 }

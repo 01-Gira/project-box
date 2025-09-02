@@ -30,8 +30,12 @@ class _DetailProjectPageState extends State<DetailProjectPage>
   late TabController _tabController;
 
   final TextEditingController _taskTitleController = TextEditingController();
+  final TextEditingController _taskDescriptionController =
+      TextEditingController();
   final TextEditingController _logTextController = TextEditingController();
   File? _logImageFile;
+  DateTime? _taskDueDate;
+  int _taskPriority = 0;
 
   @override
   void initState() {
@@ -47,6 +51,7 @@ class _DetailProjectPageState extends State<DetailProjectPage>
   void dispose() {
     _tabController.dispose();
     _taskTitleController.dispose();
+    _taskDescriptionController.dispose();
     _logTextController.dispose();
     super.dispose();
   }
@@ -59,11 +64,21 @@ class _DetailProjectPageState extends State<DetailProjectPage>
 
   void _saveTask() {
     final title = _taskTitleController.text.trim();
+    final description = _taskDescriptionController.text.trim();
     if (title.isNotEmpty) {
       context.read<CreateTaskBloc>().add(
-        TaskSubmitted(title: title, projectId: widget.projectId),
+        TaskSubmitted(
+          title: title,
+          projectId: widget.projectId,
+          description: description.isEmpty ? null : description,
+          dueDate: _taskDueDate?.millisecondsSinceEpoch,
+          priority: _taskPriority,
+        ),
       );
       _taskTitleController.clear();
+      _taskDescriptionController.clear();
+      _taskDueDate = null;
+      _taskPriority = 0;
       Navigator.pop(context);
     }
   }
@@ -212,30 +227,79 @@ class _DetailProjectPageState extends State<DetailProjectPage>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(
-            16,
-            16,
-            16,
-            MediaQuery.of(context).viewInsets.bottom + 16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(l10n.addTask, style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _taskTitleController,
-                decoration: InputDecoration(labelText: l10n.taskTitleLabel),
-                autofocus: true,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(onPressed: _saveTask, child: Text(l10n.save)),
-            ],
-          ),
-        );
-      },
+      builder: (_) => StatefulBuilder(
+        builder: (context, setState) {
+          return Padding(
+            padding: EdgeInsets.fromLTRB(
+              16,
+              16,
+              16,
+              MediaQuery.of(context).viewInsets.bottom + 16,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  l10n.addTask,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _taskTitleController,
+                  decoration: InputDecoration(labelText: l10n.taskTitleLabel),
+                  autofocus: true,
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _taskDescriptionController,
+                  decoration:
+                      InputDecoration(labelText: l10n.projectDescriptionLabel),
+                ),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<int>(
+                  value: _taskPriority,
+                  decoration: InputDecoration(labelText: l10n.priority),
+                  items: List.generate(
+                    5,
+                    (index) =>
+                        DropdownMenuItem(value: index, child: Text('$index')),
+                  ),
+                  onChanged: (value) =>
+                      setState(() => _taskPriority = value ?? 0),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _taskDueDate != null
+                            ? DateFormat.yMd().format(_taskDueDate!)
+                            : l10n.dueDate,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+                        if (picked != null) {
+                          setState(() => _taskDueDate = picked);
+                        }
+                      },
+                      child: const Icon(Icons.calendar_today),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(onPressed: _saveTask, child: Text(l10n.save)),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -428,11 +492,11 @@ class _InfoView extends StatelessWidget {
         const SizedBox(height: 8),
         Text(project.description, style: theme.textTheme.bodyMedium),
         const Divider(height: 40),
-        _InfoTile(
-          icon: Icons.label_outline,
-          title: 'Status',
-          subtitle: project.status,
-        ),
+          _InfoTile(
+            icon: Icons.label_outline,
+            title: l10n.projectStatusLabel,
+            subtitle: project.status,
+          ),
         _InfoTile(
           icon: Icons.calendar_today_outlined,
           title: l10n.createdDate,

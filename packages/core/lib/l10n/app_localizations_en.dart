@@ -27,6 +27,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nextTask => 'Next Task';
 
   @override
+  String get ad => 'Ad';
+
+  @override
+  String get goodMorning => 'Good Morning,';
+
+  @override
+  String get goodAfternoon => 'Good Afternoon,';
+
+  @override
+  String get goodEvening => 'Good Evening,';
+
+  @override
+  String get goodNight => 'Good Night,';
+
+  @override
+  String get homeTagline => 'Let\'s Create!';
+
+  @override
+  String failedToLoadProjects(String error) {
+    return 'Failed to load projects: $error';
+  }
+
+  @override
+  String fromProject(String projectName) {
+    return 'from: $projectName';
+  }
+
+  @override
   String get task => 'Task';
 
   @override
@@ -169,4 +197,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get changeStatus => 'Change Status';
+
+  @override
+  String get appTitle => 'Project Box';
+
+  @override
+  String get projectBoxExport => 'Project Box export';
+
+  @override
+  String get export => 'Export';
+
+  @override
+  String get import => 'Import';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get system => 'System';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get noData => 'No data';
+
+  @override
+  String get manual => 'Manual';
+
+  @override
+  String get dueDate => 'Due Date';
+
+  @override
+  String get priority => 'Priority';
+
+  @override
+  String priorityLabel(String priority) {
+    return 'P: $priority';
+  }
 }

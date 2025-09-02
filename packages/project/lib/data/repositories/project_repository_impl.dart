@@ -7,11 +7,16 @@ import 'package:project/domain/repositories/project_repository.dart';
 import 'package:project/data/datasources/project_local_data_source.dart';
 import 'package:project/data/models/project_table.dart';
 import 'package:project/domain/enitites/project.dart';
+import 'package:core/analytics/analytics_service.dart';
 
 class ProjectRepositoryImpl implements ProjectRepository {
   final ProjectLocalDataSource localDataSource;
+  final AnalyticsService analyticsService;
 
-  ProjectRepositoryImpl({required this.localDataSource});
+  ProjectRepositoryImpl({
+    required this.localDataSource,
+    required this.analyticsService,
+  });
 
   @override
   Future<Either<Failure, List<Project>>> getProjects({int? limit}) async {
@@ -87,12 +92,20 @@ class ProjectRepositoryImpl implements ProjectRepository {
   Future<Either<Failure, DashboardStats>> getDashboardStats() async {
     try {
       final result = await localDataSource.getDashboardStats();
+      final daily = (result['dailyTaskCompletions'] as List<dynamic>? ?? [])
+          .cast<int>();
+      final totalTasks = result['totalTasks'] as int? ?? 0;
+      final burnDown = analyticsService.calculateBurnDown(totalTasks, daily);
+      final velocity = analyticsService.calculateVelocity(daily);
       // Ubah Map menjadi Entitas
       return Right(
         DashboardStats(
           completedProjects: result['completedProjects'] ?? 0,
           totalTasksDone: result['totalTasksDone'] ?? 0,
           productiveStreak: result['productiveStreak'] ?? 0,
+          dailyTaskCompletions: daily,
+          burnDownData: burnDown,
+          velocity: velocity,
         ),
       );
     } on DatabaseException catch (e) {
