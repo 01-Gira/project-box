@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "355006554138",
+    "project_id": "project-box-9685e",
+    "storage_bucket": "project-box-9685e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355006554138:android:8a447948fc849782fdb1a3",
+        "android_client_info": {
+          "package_name": "com.example.project_box"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBURXkDppzYiFiBPkcqUV3K35R8pYsobj0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
